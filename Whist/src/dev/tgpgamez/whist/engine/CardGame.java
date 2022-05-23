@@ -13,9 +13,9 @@ import java.util.Map;
  * @version 1.0
  * @author Tobias
  */
-public class CardGame implements GameEngine {
+public abstract class CardGame implements GameEngine {
     //List of the players
-    private List<Player> players;
+    protected List<Player> players;
     /**
      * Get the players
      * @return List of players
@@ -25,7 +25,7 @@ public class CardGame implements GameEngine {
     }
 
     //The dealer in the game
-    private Dealer dealer;
+    protected Dealer dealer;
     /**
      * Get the dealer
      * @return The dealer
@@ -35,7 +35,7 @@ public class CardGame implements GameEngine {
     }
 
     //The deck in the game
-    private Deck deck;
+    protected Deck deck;
     /**
      * Get the deck
      * @return Deck
@@ -52,117 +52,46 @@ public class CardGame implements GameEngine {
         this.deck = deck;
     }
 
-    private HashMap<Player, Card> dealtCards;
-    private HashMap<Player, Integer> player_points;
-
-
+    /**
+     * Constructor
+     */
     public CardGame() {
         this.deck = new Deck();
         this.dealer = new Dealer();
         this.players = new ArrayList<>();
-        this.dealtCards = new HashMap<>();
-        this.player_points = new HashMap<>();
     }
 
-    private boolean isRunning;
+    //Boolean to check if the game is still running
+    protected boolean isRunning;
 
+    /**
+     * Method to start the game
+     */
     @Override
-    public void Start() {
-        this.isRunning = true;
-        for (Player player : players) {
-            player_points.put(player, 0);
-        }
-        Running();
-    }
+    public abstract void Start();
 
+    /**
+     * Method for while the game is running
+     */
     @Override
-    public void Running() {
-        int index = 0;
-        int startPos = 0;
-        while(isRunning) {
+    public abstract void Running();
 
-            Symbol symbol = null;
-            this.dealtCards = new HashMap<>();
-            for (int i = 0; i < players.size(); i++) {
-                //System.out.println(index);
-                Card card = players.get(index).playCard(0);
-                if (i == startPos) {
-                    //System.out.println("Symbol: " + card.getSymbol() + " (" + index + " / " + i + ")");
-                    symbol = card.getSymbol();
-                }
-                if (index >= players.size()-1) {
-                    index = 0;
-                } else {
-                    index++;
-                }
-                this.dealtCards.put(players.get(index), card);
-            }
-
-            Player stik_winner = findStikWinner(symbol);
-
-            System.out.println(stik_winner.getName() + " vandt et stik");
-
-            player_points.put(stik_winner, player_points.get(stik_winner)+1);
-
-            if (isHandsEmpty()) {
-                isRunning = false;
-                for (Map.Entry<Player, Integer> entry : player_points.entrySet()) {
-                    System.out.println(entry.getKey().getName() + ": " + entry.getValue());
-                }
-            } else {
-                startPos = getWinnerPos(stik_winner);
-            }
-        }
-    }
-
+    /**
+     * Method to end the game
+     */
     @Override
-    public void End() {
+    public abstract void End();
 
-    }
+    /**
+     * Method to del the cards out to players
+     */
+    public abstract void dealCards();
 
-
+    /**
+     * Method to add a player to the "table"
+     * @param player
+     */
     public void addPlayer(Player player) {
         this.players.add(player);
-    }
-
-    public void dealCards() {
-        List<List<Card>> hands = this.dealer.dealCards(this.deck.getCards(), players.size());
-        for (int i = 0; i < players.size(); i++) {
-            players.get(i).setHand(hands.get(i));
-        }
-    }
-
-
-    private boolean isHandsEmpty() {
-        for (Player player : players) {
-            if (player.getHand().size() > 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private Player findStikWinner(Symbol symbol) {
-        Player winner = null;
-        Card highestCard = Card.Empty();
-        for (Map.Entry<Player, Card> entry : this.dealtCards.entrySet()) {
-            if (entry.getValue().isSameSymbol(symbol)) {
-                if (entry.getValue().isHigher(highestCard.getNumber())) {
-                    highestCard = entry.getValue();
-                    winner = entry.getKey();
-                }
-            }
-
-        }
-        return winner;
-    }
-
-    private int getWinnerPos(Player player) {
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).equals(player)) {
-                return i;
-            }
-        }
-        return 0;
     }
 }

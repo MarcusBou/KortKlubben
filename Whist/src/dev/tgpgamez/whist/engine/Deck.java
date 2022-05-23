@@ -22,10 +22,17 @@ public class Deck {
         return cards;
     }
 
+    /**
+     * Constructor
+     */
     public Deck() {
         this.cards = new ArrayList<>();
     }
 
+    /**
+     * Constructor
+     * @param cards Cards for the deck
+     */
     public Deck(List<Card> cards) {
         this.cards = cards;
     }

@@ -15,6 +15,9 @@ import java.util.List;
  */
 public class Dealer {
 
+    /**
+     * Constructor
+     */
     public Dealer() {
 
     }

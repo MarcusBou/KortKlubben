@@ -37,10 +37,17 @@ public class Player {
         return name;
     }
 
+    /**
+     * Constructor
+     */
     public Player() {
         hand = new ArrayList<>();
     }
 
+    /**
+     * Constructor
+     * @param name Name of player
+     */
     public Player(String name) {
         hand = new ArrayList<>();
         this.name = name;
