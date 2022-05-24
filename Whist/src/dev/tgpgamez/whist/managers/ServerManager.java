@@ -1,6 +1,5 @@
-package dev.tgpgamez.whist;
+package dev.tgpgamez.whist.managers;
 
-import dev.tgpgamez.whist.engine.GameEngine;
 import dev.tgpgamez.whist.games.WhistGame;
 
 import java.util.ArrayList;
