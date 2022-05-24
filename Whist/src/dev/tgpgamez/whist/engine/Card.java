@@ -5,7 +5,7 @@ package dev.tgpgamez.whist.engine;
  *
  * This class is used to all related to a Card
  *
- * @version 1.0
+ * @version 1.01
  * @author Tobias
  */
 public class Card {
