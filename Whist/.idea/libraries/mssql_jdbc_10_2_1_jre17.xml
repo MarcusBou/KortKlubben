@@ -1,7 +1,8 @@
 <component name="libraryTable">
   <library name="mssql-jdbc-10.2.1.jre17">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Downloads/mssql-jdbc-10.2.1.jre17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/mssql-jdbc-10.2.1.jre17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/mysql-connector.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

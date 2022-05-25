@@ -2,6 +2,7 @@ package dev.tgpgamez.whist;
 
 import dev.tgpgamez.whist.engine.*;
 import dev.tgpgamez.whist.games.WhistGame;
+import dev.tgpgamez.whist.managers.DBManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -28,30 +29,41 @@ public class Whist {
         }*/
 
         //System.out.println(ErrorMessages.get("WrongPassword"));
-        Connection conn = null;
+        DBManager dbManager = new DBManager("jdbc:sqlserver://192.168.1.126;databaseName=WhistDatabase;trustServerCertificate=true",
+                                            "WhistAdmin", "Kode1234!");
+        System.out.println(dbManager.getUserFromUsername("TGPGamez").toString());
+        /*Connection conn = null;
+        String conString = "jdbc:sqlserver://192.168.1.126;databaseName=WhistDatabase;trustServerCertificate=true";
+        try{
 
-        try {
-            DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
-            String dbURL = "jdbc:sqlserver://192.168.1.126\\WhistDatabase";
-            String user = "WhistAdmin";
-            String pass = "Kode1234!";
-            conn = DriverManager.getConnection(dbURL, user, pass);
-            if (conn != null) {
-                System.out.println("Connected");
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            conn = DriverManager.getConnection(
+                    conString,"WhistAdmin","Kode1234!");
+
+            //Procedure
+            CallableStatement cs = conn.prepareCall("{CALL GetUserTFromUsername(?)}");
+
+            cs.setString(1, "TGPGamez");
+            ResultSet result = cs.executeQuery();
+            while (result.next()) {
+                System.out.println(result.getString("Name"));
             }
 
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            //Normal query
+            //Statement stmt = conn.createStatement();
+            //ResultSet rs = stmt.executeQuery("select UserT.Name, UserT.Email, UserT.Birthdate from UserT");
+            //while(rs.next())
+            //    System.out.println(rs.getString(1)+"  "+rs.getString(2)+"  "+rs.getDate(3));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         } finally {
-            System.out.println("Error");
-            try {
-                if (conn != null && !conn.isClosed()) {
+            if (conn != null) {
+                try {
                     conn.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
-        }
+        }*/
     }
 }

@@ -69,7 +69,7 @@ BEGIN
 		SELECT 'SUCCESS';
 	ELSE
         -- Return that is was the wrong password
-		SELECT 'WrongPassword';
+		SELECT 'WrongUsernameOrPassword';
 END;
 ELSE
     -- If user doesn't exist, then return error key
@@ -79,7 +79,8 @@ ELSE
 /*
 * Procedure to get user information
 */
-CREATE PROCEDURE GetUserTFromUsername @Username VARCHAR(50)
+CREATE PROCEDURE GetUserTFromUsername 
+    @Username VARCHAR(50)
 AS
 -- Check that user exists
 IF EXISTS (SELECT 1 FROM UserT WHERE UserT.Username = @Username)
@@ -97,7 +98,8 @@ ELSE
 /*
 * Procedure to get stats from user
 */
-CREATE PROCEDURE GetStatsFromUserT @Username VARCHAR(50)
+CREATE PROCEDURE GetStatsFromUserT 
+    @Username VARCHAR(50)
 AS
 -- Check that user exists
 IF EXISTS (SELECT 1 FROM UserT WHERE UserT.Username = @Username)
@@ -143,3 +145,10 @@ UPDATE Stats SET Stats.Lost = Stats.Lost + 1 WHERE Stats.ID = @Stats_ID;
 UPDATE Stats SET Stats.GamesPlayed = Stats.GamesPlayed + 1 WHERE Stats.ID = @Stats_ID;
 END;
     
+
+
+
+-- TEST DATA
+EXEC CreateUserT 'TGPGamez', 'Kode1234!', 'tobias@gmail.com', 'Tobias', '2002-02-18'
+EXEC CreateUserT 'NobodyKnow', 'Kode1234!', 'marcus@gmail.com', 'Marcus', '2002-05-04'
+EXEC CreateUserT 'Sebgineer', 'Kode1234!', 'sebastian@gmail.com', 'Sebastian', '1700-11-16'
