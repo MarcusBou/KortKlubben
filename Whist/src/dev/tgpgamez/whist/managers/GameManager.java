@@ -1,4 +1,4 @@
-package dev.tgpgamez.whist;
+package dev.tgpgamez.whist.managers;
 
 import dev.tgpgamez.whist.engine.GameEngine;
 
