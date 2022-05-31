@@ -5,6 +5,7 @@ import dev.tgpgamez.whist.engine.*;
 import java.util.*;
 
 public class WhistGame extends CardGame {
+    private GameListener endPointListener;
     private HashMap<Player, Card> dealtCards;
     private HashMap<Player, Integer> player_points;
 
@@ -13,6 +14,7 @@ public class WhistGame extends CardGame {
         this.dealtCards = new HashMap<>();
         this.player_points = new HashMap<>();
     }
+
 
     @Override
     public void Start() {
@@ -55,7 +57,7 @@ public class WhistGame extends CardGame {
             //Find the Player who won the stik
             Player stik_winner = findStikWinner(symbol);
 
-            System.out.println(stik_winner.getName() + " vandt et stik");
+            System.out.println(stik_winner.getUsername() + " vandt et stik");
 
             //Add point to stik winner
             player_points.put(stik_winner, player_points.get(stik_winner)+1);
@@ -77,8 +79,13 @@ public class WhistGame extends CardGame {
 
         System.out.println("\nThe winners where:");
         for (Player player : getRoundWinner()) {
-            System.out.println(" - " + player.getName());
+            System.out.println(" - " + player.getUsername());
         }
+    }
+
+    @Override
+    public void setListener(GameListener listener) {
+        this.endPointListener = listener;
     }
 
     /**
@@ -131,6 +138,13 @@ public class WhistGame extends CardGame {
         for (int i = 0; i < players.size(); i++) {
             //Set the hand for each player
             players.get(i).setHand(hands.get(i));
+        }
+    }
+
+    @Override
+    public void onCommandRecieved(String command) {
+        switch (command) {
+
         }
     }
 

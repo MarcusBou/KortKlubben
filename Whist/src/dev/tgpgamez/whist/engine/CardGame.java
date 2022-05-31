@@ -94,4 +94,6 @@ public abstract class CardGame implements GameEngine {
     public void addPlayer(Player player) {
         this.players.add(player);
     }
+
+    public abstract void onCommandRecieved(String command);
 }

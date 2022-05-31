@@ -16,4 +16,6 @@ public interface GameEngine {
      * Abstract method to end the game
      */
     abstract void End();
+
+    abstract void setListener(GameListener listener);
 }

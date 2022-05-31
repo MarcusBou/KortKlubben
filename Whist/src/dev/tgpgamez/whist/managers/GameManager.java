@@ -1,5 +1,6 @@
 package dev.tgpgamez.whist.managers;
 
+import dev.tgpgamez.whist.engine.GameListener;
 import dev.tgpgamez.whist.engine.GameEngine;
 
 /**
@@ -9,6 +10,7 @@ public class GameManager {
     /**Defines which game and ruleset the game is running from*/
     private GameEngine game;
 
+    private GameListener listener;
 
     /**
      * Constructor for creating a game from the game in the
@@ -16,6 +18,8 @@ public class GameManager {
      * */
     public GameManager(GameEngine chosenGame){
         this.game = chosenGame;
+
+
     }
 
     /**

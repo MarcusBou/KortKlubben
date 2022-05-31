@@ -31,10 +31,13 @@ public class Player {
         this.hand = hand;
     }
 
-    private String name;
-
-    public String getName() {
-        return name;
+    private String username;
+    /**
+     * Get the player username
+     * @return Username
+     */
+    public String getUsername() {
+        return username;
     }
 
     /**
@@ -46,11 +49,11 @@ public class Player {
 
     /**
      * Constructor
-     * @param name Name of player
+     * @param username Username of player
      */
-    public Player(String name) {
+    public Player(String username) {
         hand = new ArrayList<>();
-        this.name = name;
+        this.username = username;
     }
 
     /**
