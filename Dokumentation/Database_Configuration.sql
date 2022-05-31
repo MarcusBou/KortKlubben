@@ -66,14 +66,14 @@ BEGIN
     -- Compare password
     IF (@PasswordFromDB = @InputPassword)
         -- Return that is was correct
-		SELECT 'SUCCESS';
+		SELECT 'SUCCESS' AS Message;
 	ELSE
         -- Return that is was the wrong password
-		SELECT 'WrongUsernameOrPassword';
+		SELECT 'WrongUsernameOrPassword' AS Message;
 END;
 ELSE
     -- If user doesn't exist, then return error key
-    SELECT 'UnknownUsername';
+    SELECT 'UnknownUsername' AS Message;
 
 
 /*

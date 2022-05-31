@@ -28,42 +28,8 @@ public class Whist {
             System.out.println(" ");
         }*/
 
-        //System.out.println(ErrorMessages.get("WrongPassword"));
         DBManager dbManager = new DBManager("jdbc:sqlserver://192.168.1.126;databaseName=WhistDatabase;trustServerCertificate=true",
                                             "WhistAdmin", "Kode1234!");
-        System.out.println(dbManager.getUserFromUsername("TGPGamez").toString());
-        /*Connection conn = null;
-        String conString = "jdbc:sqlserver://192.168.1.126;databaseName=WhistDatabase;trustServerCertificate=true";
-        try{
-
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            conn = DriverManager.getConnection(
-                    conString,"WhistAdmin","Kode1234!");
-
-            //Procedure
-            CallableStatement cs = conn.prepareCall("{CALL GetUserTFromUsername(?)}");
-
-            cs.setString(1, "TGPGamez");
-            ResultSet result = cs.executeQuery();
-            while (result.next()) {
-                System.out.println(result.getString("Name"));
-            }
-
-            //Normal query
-            //Statement stmt = conn.createStatement();
-            //ResultSet rs = stmt.executeQuery("select UserT.Name, UserT.Email, UserT.Birthdate from UserT");
-            //while(rs.next())
-            //    System.out.println(rs.getString(1)+"  "+rs.getString(2)+"  "+rs.getDate(3));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }*/
+        System.out.println(dbManager.checkPassword("TGPGamez", "Kode1234!"));
     }
 }
