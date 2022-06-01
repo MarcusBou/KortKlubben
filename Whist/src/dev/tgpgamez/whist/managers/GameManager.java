@@ -25,14 +25,14 @@ public class GameManager {
     /**
      * Translates message from string to a JSONOBJECT
      * */
-    public void TranslateMessage(String message){
+    public void translateMessage(String message){
 
     }
 
     /**
      * Gets the address from WS so connection is possible
      * */
-    public String GetAddress(){
+    public String getAddress(){
         return "Address";
     }
 }

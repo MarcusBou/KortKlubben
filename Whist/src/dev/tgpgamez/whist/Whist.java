@@ -1,12 +1,6 @@
 package dev.tgpgamez.whist;
 
-import dev.tgpgamez.whist.engine.*;
-import dev.tgpgamez.whist.games.WhistGame;
-import dev.tgpgamez.whist.managers.DBManager;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import dev.tgpgamez.whist.database.GameDBManager;
 
 public class Whist {
     public static void main(String[] args) {
@@ -28,7 +22,7 @@ public class Whist {
             System.out.println(" ");
         }*/
 
-        DBManager dbManager = new DBManager("jdbc:sqlserver://192.168.1.126;databaseName=WhistDatabase;trustServerCertificate=true",
+        GameDBManager dbManager = new GameDBManager("jdbc:sqlserver://192.168.1.126;databaseName=WhistDatabase;trustServerCertificate=true",
                                             "WhistAdmin", "Kode1234!");
         System.out.println(dbManager.checkPassword("TGPGamez", "Kode1234!"));
     }

@@ -1,6 +1,5 @@
-package dev.tgpgamez.whist.managers;
+package dev.tgpgamez.whist.database;
 
-import dev.tgpgamez.whist.ErrorMessages;
 import dev.tgpgamez.whist.Stats;
 import dev.tgpgamez.whist.User;
 
@@ -8,8 +7,8 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DBManager extends BaseDatabase {
-    public DBManager(String conString, String user, String password) {
+public class GameDBManager extends BaseDatabase {
+    public GameDBManager(String conString, String user, String password) {
         super(conString, user, password);
     }
 
@@ -50,7 +49,7 @@ public class DBManager extends BaseDatabase {
         return null;
     }
 
-    public void AddToWins(String username) {
+    public void addToWins(String username) {
         this.Open();
         try {
             CallableStatement cs = this.getConnection().prepareCall("{CALL AddOneToWins(?)}");
@@ -61,7 +60,7 @@ public class DBManager extends BaseDatabase {
         }
     }
 
-    public void AddToLost(String username) {
+    public void addToLost(String username) {
         this.Open();
         try {
             CallableStatement cs = this.getConnection().prepareCall("{CALL AddOneToLost(?)}");

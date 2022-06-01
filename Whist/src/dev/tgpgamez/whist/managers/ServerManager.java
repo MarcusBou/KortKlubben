@@ -26,7 +26,7 @@ public class ServerManager {
      **/
     public String createRoom(){
         GameManager room = new GameManager(new WhistGame());
-        String address = room.GetAddress();
+        String address = room.getAddress();
         this.ActiveRooms.add(room);
         return address;
     }

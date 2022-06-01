@@ -52,7 +52,7 @@ public class Player {
      * @param username Username of player
      */
     public Player(String username) {
-        hand = new ArrayList<>();
+        this.hand = new ArrayList<>();
         this.username = username;
     }
 

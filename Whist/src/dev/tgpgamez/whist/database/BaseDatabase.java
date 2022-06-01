@@ -1,4 +1,4 @@
-package dev.tgpgamez.whist.managers;
+package dev.tgpgamez.whist.database;
 
 
 import java.sql.*;
