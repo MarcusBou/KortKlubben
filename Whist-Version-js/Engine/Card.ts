@@ -1,6 +1,5 @@
-"use strict";
-exports.__esModule = true;
-exports.Card = void 0;
+import { Symbol } from "./Symbol";
+
 /**
  * Class for Card
  *
@@ -9,47 +8,56 @@ exports.Card = void 0;
  * @version 1.01
  * @author Tobias
  */
-var Card = /** @class */ (function () {
+export class Card {
+    //The number on the card
+    private number: number;
+    //Which Symbol the card has
+    private symbol: Symbol;
+
+    /**
+     * Get the number
+     * @return Card number
+     */
+    public GetNumber(): number {
+        return this.number;
+    }
+
+    /**
+     * Get the symbol
+     * @return Card symbol
+     */
+    public GetSymbol(): Symbol {
+        return this.symbol;
+    }
+
+
     /**
      * Constructor
      * @param symbol Symbol of card
      * @param number Number of card
      */
-    function Card(symbol, number) {
+    constructor(symbol: Symbol, number: number) {
         this.symbol = symbol;
         this.number = number;
     }
-    /**
-     * Get the number
-     * @return Card number
-     */
-    Card.prototype.GetNumber = function () {
-        return this.number;
-    };
-    /**
-     * Get the symbol
-     * @return Card symbol
-     */
-    Card.prototype.GetSymbol = function () {
-        return this.symbol;
-    };
+
     /**
      * Method to check if symbol is same as argument
      * @param symbol Symbol to compare
      * @return if the symbol is the same
      */
-    Card.prototype.IsSameSymbol = function (symbol) {
+    IsSameSymbol(symbol): boolean {
         return this.symbol == symbol;
-    };
+    }
+
     /**
      * Method to check if number is higher than argument
      * @param number Number to compare
      * @return if number is higher
      */
-    Card.prototype.IsHigher = function (numb) {
+    IsHigher(numb): boolean {
         return this.number >= numb;
-    };
-    Card.Empty = new Card(null, 0);
-    return Card;
-}());
-exports.Card = Card;
+    }
+
+    static Empty = new Card(null, 0);
+}
