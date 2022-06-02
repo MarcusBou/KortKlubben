@@ -1,3 +1,3 @@
-interface RestListener{
-    
+export interface RestListener{
+    (command: string): String;
 }
