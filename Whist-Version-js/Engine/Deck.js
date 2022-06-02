@@ -1,5 +1,6 @@
-import { Card } from './Card';
-
+"use strict";
+exports.__esModule = true;
+exports.Deck = void 0;
 /**
  * Class for Deck
  *
@@ -8,57 +9,48 @@ import { Card } from './Card';
  * @version 1.0
  * @author Tobias
  */
-export class Deck {
-    //The cards in the deck
-    private cards: Card[];
-
-    /**
-     * Get the deck
-     * @return List of cards
-     */
-    public getCards(): Card[] {
-        return this.cards;
-    }
-
-
-    public constructor(x: Card[]);
+var Deck = /** @class */ (function () {
     /**
      * Constructor
      * @param cards Cards for the deck
      */
-    public constructor(myarray: any[])  {
+    function Deck(myarray) {
         if (myarray.length == 0) {
-            this.cards = new Array<Card>();
+            this.cards = new Array();
         }
         if (myarray.length == 1) {
             this.cards = myarray[0];
         }
     }
-
-    
-
+    /**
+     * Get the deck
+     * @return List of cards
+     */
+    Deck.prototype.getCards = function () {
+        return this.cards;
+    };
     /**
      * Get a card from the deck by index
      * @param index Which index the card are in
      * @return Card
      */
-    public getCardFromDeck(index): Card {
+    Deck.prototype.getCardFromDeck = function (index) {
         return this.cards[index];
-    }
-
+    };
     /**
      * Set the Deck
      * @param cards
      */
-    public setCards(cards: Card[]): void {
+    Deck.prototype.setCards = function (cards) {
         this.cards = cards;
-    }
-
+    };
     /**
      * Add a card to the Deck
      * @param card Card to add
      */
-    public addCardToDeck(card: Card) {
+    Deck.prototype.addCardToDeck = function (card) {
         this.cards.push(card);
-    }
-}
+    };
+    return Deck;
+}());
+exports.Deck = Deck;
