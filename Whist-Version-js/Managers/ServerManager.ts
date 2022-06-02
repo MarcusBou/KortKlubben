@@ -1,7 +1,9 @@
 import { GameManager } from "./GameManager";
+import { RestListener } from "../Listeners/RestListener";
 
 
-export class ServerManager{
+
+export class ServerManager implements RestListener{
     
     /** 
      * Array over Active Rooms;
@@ -19,10 +21,12 @@ export class ServerManager{
     GetListOfRooms(){
         return this.activeRooms;
     }
+
+
 }
 
 const room = new ServerManager();
 room.AddRoom(12);
 const rooms = room.GetListOfRooms();
 
-console.log(rooms.toString())
+console.log(rooms.toString());

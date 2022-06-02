@@ -33,9 +33,19 @@ var Card = /** @class */ (function () {
     Card.prototype.GetSymbol = function () {
         return this.symbol;
     };
+    /**
+     * Method to check if symbol is same as argument
+     * @param symbol Symbol to compare
+     * @return if the symbol is the same
+     */
     Card.prototype.IsSameSymbol = function (symbol) {
         return this.symbol == symbol;
     };
+    /**
+     * Method to check if number is higher than argument
+     * @param number Number to compare
+     * @return if number is higher
+     */
     Card.prototype.IsHigher = function (numb) {
         return this.number >= numb;
     };

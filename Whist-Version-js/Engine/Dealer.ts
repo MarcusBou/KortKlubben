@@ -1,7 +1,4 @@
-"use strict";
-exports.__esModule = true;
-exports.Dealer = void 0;
-var Card_1 = require("./Card");
+import { Card } from "./Card";
 /**
  * Class for Dealer
  *
@@ -10,16 +7,16 @@ var Card_1 = require("./Card");
  * @version 1.0
  * @author Tobias
  */
-var Dealer = /** @class */ (function () {
-    function Dealer() {
-    }
+export class Dealer {
+    constructor() {}
+
     /**
      * Method to shuffle a list of cards
      * @param cards List of cards to shuffle
      * @return Shuffled list of cards
      */
-    Dealer.prototype.shuffleCards = function (cards) {
-        var j, x, i;
+    shuffleCards(cards: Card[]): Card[] {
+        var j: number, x: Card, i: number;
         for (i = cards.length - 1; i > 0; i--) {
             j = Math.floor(Math.random() * (i + 1));
             x = cards[i];
@@ -27,22 +24,25 @@ var Dealer = /** @class */ (function () {
             cards[j] = x;
         }
         return cards;
-    };
+    }
+
+
     /**
      * Method used to deal cards to x amount of players
      * @param cards Cards to deal out
      * @param playerAmount Amount of players
      * @return List that has multiple list of cards
      */
-    Dealer.prototype.dealCards = function (cards, playerAmount) {
+     dealCards(cards: Card[], playerAmount: number): Card[][] {
         //Calculates the hand size our from amount of players and cards size
         var hand_size = cards.length / playerAmount;
-        var temp_hands = Array();
+        var temp_hands: Card[][] = Array<Card[]>(); 
+        
         //Loop for each "player"
-        for (var i = 0; i < playerAmount; i++) {
-            var temp_cards = Card_1.Card[hand_size];
+        for (let i = 0; i < playerAmount; i++) {
+            var temp_cards = Card[hand_size];
             //Loop hand_size times
-            for (var j = 0; j < hand_size; j++) {
+            for (let j = 0; j < hand_size; j++) {
                 //Add card at index 0 to temp_cards
                 //Remove the card at index 0
                 temp_cards.push(cards.shift());
@@ -51,7 +51,7 @@ var Dealer = /** @class */ (function () {
             temp_hands.push(temp_cards);
         }
         return temp_cards;
-    };
-    return Dealer;
-}());
-exports.Dealer = Dealer;
+    }
+}
+
+
