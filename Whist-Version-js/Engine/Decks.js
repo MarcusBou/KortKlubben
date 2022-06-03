@@ -13,7 +13,7 @@ var Decks = /** @class */ (function () {
         });
         for (var symbol in symbols) {
             for (var i = 0; i < 14; i++) {
-                cards.push(new Card_1.Card(Object.keys(Symbol_1.Symbol).indexOf(symbol), i));
+                cards.push(new Card_1.Card(parseInt(symbol), i));
             }
         }
         return cards;

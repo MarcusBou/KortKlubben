@@ -20,21 +20,13 @@ export class Deck {
         return this.cards;
     }
 
-
-    public constructor(x: Card[]);
     /**
      * Constructor
      * @param cards Cards for the deck
      */
-    public constructor(myarray: any[])  {
-        if (myarray.length == 0) {
-            this.cards = new Array<Card>();
-        }
-        if (myarray.length == 1) {
-            this.cards = myarray[0];
-        }
+    public constructor()  {
+        this.cards = new Array<Card>();
     }
-
     
 
     /**
