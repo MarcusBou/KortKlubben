@@ -12,7 +12,7 @@ export class Decks {
         });
         for(const symbol in symbols) {
             for(let i = 0; i < 14; i++) {
-                cards.push(new Card(Object.keys(Symbol).indexOf(symbol), i))
+                cards.push(new Card(parseInt(symbol), i));
             }
         }
         return cards;
