@@ -1,21 +1,34 @@
 "use strict";
 exports.__esModule = true;
-exports.ServerManager = void 0;
-var GameManager_1 = require("./GameManager");
+var RestApi_1 = require("../RestApi/RestApi");
 var ServerManager = /** @class */ (function () {
     function ServerManager() {
-        this.activeRooms = [];
+        this.CreateRoom = new RestApi_1.RestApi(this);
     }
-    ServerManager.prototype.AddRoom = function (id) {
-        this.activeRooms.push(new GameManager_1.GameManager(id));
-    };
+    /**
+     * Creates room with
+     * @param id For logging later
+     */
+    /*AddRoom(id) {
+        //this.activeRooms.push(new GameManager(id));
+    }*/
+    /**
+     * Gets list of rooms
+     * @returns list of the active rooms
+     */
     ServerManager.prototype.GetListOfRooms = function () {
         return this.activeRooms;
     };
+    ServerManager.prototype.OnMessage = function () {
+        console.log("Method not implemented.");
+        return "yip";
+    };
+    ServerManager.prototype.OnRequest = function () {
+        return this.GetListOfRooms();
+    };
     return ServerManager;
 }());
-exports.ServerManager = ServerManager;
 var room = new ServerManager();
-room.AddRoom(12);
-var rooms = room.GetListOfRooms();
-console.log(rooms.toString());
+//room.AddRoom(12);
+//const rooms = room.OnRequest();
+//console.log(rooms);
