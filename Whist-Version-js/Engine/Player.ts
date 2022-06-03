@@ -33,9 +33,31 @@ export class Player {
         return this.username;
     }
 
-    //constructor(x: string);
+    /**
+     * Constructor
+     * @param username Username of player
+     */
     constructor(username: string) {
-
+        this.hand = new Array<Card>();
+        this.username = username;
     }
 
+    /**
+     * Recieve a card for the hand
+     * @param card
+     */
+    public RecieveCard(card: Card): void {
+        this.hand.push(card);
+    }
+
+    /**
+     * Play a card
+     * @param index Card index from hand
+     * @return played card
+     */
+    public playCard(index: number): Card {
+        let playCard: Card = this.hand[index];
+        this.hand.splice(index, 1);
+        return playCard;
+    }
 }
