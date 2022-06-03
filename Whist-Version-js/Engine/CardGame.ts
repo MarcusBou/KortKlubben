@@ -1,6 +1,7 @@
 import { IGameEngine } from "./IGameEngine"
 import { Dealer } from "./Dealer"
 import { Deck } from "./Deck"
+import { Player } from "./Player";
 /**
  * Class for CardGame
  *
@@ -10,6 +11,7 @@ import { Deck } from "./Deck"
  * @author Tobias
  */
 export abstract class CardGame implements IGameEngine {
+
     //List of the players
     protected players: Player[];
     /**
@@ -44,11 +46,52 @@ export abstract class CardGame implements IGameEngine {
      * Set the deck
      * @param deck
     */
-    public setDeck(deck: Deck[]): void {
+    public setDeck(deck: Deck): void {
         this.deck = deck;
     }
 
-    Start() {
-
+    /**
+     * Constructor
+     */
+    constructor() {
+        this.deck = new Deck();
+        this.dealer = new Dealer();
+        this.players = new Array<Player>();
     }
+
+    //Boolean to check if the game is still running
+    protected isRunning: boolean;
+
+    /**
+     * Method to start the game
+     */
+    Start(): void {
+    }
+
+    /**
+     * Method for while the game is running
+     */
+    Running(): void {
+    }
+
+    /**
+     * Method to end the game
+     */
+    End(): void {
+    }
+
+    /**
+     * Method to del the cards out to players
+     */
+    public abstract dealCard();
+    
+    /**
+     * Method to add a player to the "table"
+     * @param player
+     */
+    public addPlayer(player: Player): void {
+        this.players.push(player);
+    }
+
+    public abstract onCommandRecieved(command: string): void;
 }

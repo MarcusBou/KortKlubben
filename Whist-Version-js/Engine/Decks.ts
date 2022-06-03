@@ -2,7 +2,7 @@ import { Card } from "./Card";
 import { Symbol } from "./Symbol";
 
 export class Decks {
-    static STANDARD_CARD_DECK: Card[] = this.StandardCardDeck();
+    public static STANDARD_CARD_DECK: Card[] = this.StandardCardDeck();
 
 
     private static StandardCardDeck() {
