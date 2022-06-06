@@ -31,12 +31,18 @@ var ServerManager = /** @class */ (function () {
     ServerManager.prototype.GetListOfRooms = function () {
         return this.activeRooms;
     };
+    /**
+     * method run when called in api
+     * @returns Id For room just created
+     */
     ServerManager.prototype.OnCreateRoomMessage = function () {
         var id = this.CreateRandom();
         var created = true;
         while (created) {
             if (this.CheckID(id)) {
                 this.AddRoom(id);
+                this.ActiveIds.push(id);
+                created = false;
             }
             else {
                 id = this.CreateRandom();
@@ -44,8 +50,13 @@ var ServerManager = /** @class */ (function () {
         }
         return id;
     };
+    /**
+     * method run when called in api
+     * @returns JSON String with all the active Rooms
+     */
     ServerManager.prototype.OnRoomListRequest = function () {
-        return "wee";
+        var roomlist = JSON.stringify(this.ActiveIds);
+        return roomlist;
     };
     /**
      * Returns an id such as 0984
