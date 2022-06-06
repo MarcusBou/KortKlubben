@@ -3,7 +3,7 @@ exports.__esModule = true;
 var RestApi_1 = require("../RestApi/RestApi");
 var ServerManager = /** @class */ (function () {
     function ServerManager() {
-        this.CreateRoom = new RestApi_1.RestApi(this);
+        this.CreateRoom = new RestApi_1.RestApi(this, this);
     }
     /**
      * Creates room with
@@ -24,11 +24,8 @@ var ServerManager = /** @class */ (function () {
         return "yip";
     };
     ServerManager.prototype.OnRequest = function () {
-        return this.GetListOfRooms();
+        return "wee";
     };
     return ServerManager;
 }());
 var room = new ServerManager();
-//room.AddRoom(12);
-//const rooms = room.OnRequest();
-//console.log(rooms);

@@ -13,7 +13,7 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
     private CreateRoom : RestApi;
 
     constructor() {
-        this.CreateRoom = new RestApi(this);
+        this.CreateRoom = new RestApi(this, this);
     }
     
     /**
@@ -37,15 +37,13 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
         return "yip";
     }
 
-    OnRequest(): GameManager[]{
-        return this.GetListOfRooms();
+    OnRequest(): String{
+        
+        return "wee";
     }
 
 
 }
 
 const room = new ServerManager();
-//room.AddRoom(12);
-//const rooms = room.OnRequest();
 
-//console.log(rooms);
