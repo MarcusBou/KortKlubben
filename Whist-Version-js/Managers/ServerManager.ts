@@ -1,6 +1,7 @@
 import { GameManager } from "./GameManager";
 import { CreateRoomListener, GetListOfRoomsListener } from "../Listeners/RestListener";
 import { RestApi } from "../RestApi/RestApi";
+import { json } from "express";
 /**
  * 
  * Class for servermanager
@@ -41,12 +42,18 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
         return this.activeRooms;
     }
 
+    /**
+     * method run when called in api
+     * @returns Id For room just created
+     */
     OnCreateRoomMessage(): String {
         let id = this.CreateRandom();
         let created = true;
         while(created){
             if(this.CheckID(id)){
                 this.AddRoom(id);
+                this.ActiveIds.push(id);
+                created = false;
             }
             else{
                 id = this.CreateRandom();
@@ -55,8 +62,13 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
         return id;
     }
 
+    /**
+     * method run when called in api
+     * @returns JSON String with all the active Rooms
+     */
     OnRoomListRequest(): String{
-        return "wee";
+        let roomlist = JSON.stringify(this.ActiveIds);
+        return roomlist;
     }
 
     /**
@@ -74,7 +86,6 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
      */
     CheckID(id){
         let valid = true;
-        console.log(this.ActiveIds);
         if(this.ActiveIds.includes(id)){
             valid = false;
         }
