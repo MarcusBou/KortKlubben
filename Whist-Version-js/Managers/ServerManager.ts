@@ -15,12 +15,14 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
     /** 
      * Array over Active Rooms;
     */
-    private activeRooms : GameManager[];
+    private activeRooms : Array<GameManager>;
     private CreateRoom : RestApi;
-    private ActiveIds: string[];
+    private ActiveIds: Array<string>;
 
     constructor() {
         this.CreateRoom = new RestApi(this, this);
+        this.activeRooms = new Array<GameManager>();
+        this.ActiveIds = new Array<string>();
     }
     
     /**
@@ -72,12 +74,12 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
      */
     CheckID(id){
         let valid = true;
+        console.log(this.ActiveIds);
         if(this.ActiveIds.includes(id)){
             valid = false;
         }
         return valid;
     }
-
 }
 
 const room = new ServerManager();

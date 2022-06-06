@@ -14,6 +14,8 @@ var RestApi_1 = require("../RestApi/RestApi");
 var ServerManager = /** @class */ (function () {
     function ServerManager() {
         this.CreateRoom = new RestApi_1.RestApi(this, this);
+        this.activeRooms = new Array();
+        this.ActiveIds = new Array();
     }
     /**
      * Creates room with
@@ -59,6 +61,7 @@ var ServerManager = /** @class */ (function () {
      */
     ServerManager.prototype.CheckID = function (id) {
         var valid = true;
+        console.log(this.ActiveIds);
         if (this.ActiveIds.includes(id)) {
             valid = false;
         }
