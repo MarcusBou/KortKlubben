@@ -69,7 +69,7 @@ export class WhistGame extends CardGame {
                 this.End();
             } else {
                 //Set the start position/index
-                startPos = getWinnerPos(stik_winner);
+                startPos = this.getWinnerPos(stik_winner);
             }
         }
     }
@@ -79,7 +79,7 @@ export class WhistGame extends CardGame {
 
         console.log("\nThe winner where:");
         this.getRoundWinner().forEach(player => {
-            console.log(" - " + player.getUsername());
+            console.log(" - " + player.GetUsername());
         });
     }
 
@@ -125,9 +125,48 @@ export class WhistGame extends CardGame {
      * Method to del the cards out to players
      */
     public dealCard() {
-        throw new Error("Method not implemented.");
+        //Deal the cards
+        let hands: Array<Array<Card>> = this.dealer.dealCards(this.deck.getCards(), this.players.length);
+        for (let i = 0; i < this.players.length; i++) {
+            //Set the hand for each player
+            this.players[i].SetHand(hands[i]);
+        }
     }
+
     public onCommandRecieved(command: string): void {
-        throw new Error("Method not implemented.");
+        switch (command) {
+
+        }
+    }
+
+    /**
+     * Method to check if players hands are empty
+     * @return Whether hands are empty = true or still have cards = false
+     */
+    private isHandsEmpty(): boolean {
+        this.players.forEach(player => {
+            //Check if hand has more cards
+            if (player.GetHand().length > 0) {
+                return false;
+            }
+        });
+        return true;
+    }
+
+    /**
+     * Method to get the Team who won
+     * @return The 2 winners as a list
+     */
+    private getRoundWinner(): Array<Player> {
+        //Calculate team 1 points
+        let team1_Points: number = this.playerPoints.get(this.players[0]) + this.playerPoints.get(this.players[2]);
+        //Calculate team 2 points
+        let team2_Points: number = this.playerPoints.get(this.players[1]) + this.playerPoints.get(this.players[3]);
+        //Check who won
+        if (team1_Points > team2_Points) {
+            return [this.players[0], this.players[2]];
+        } else {
+            return [this.players[1], this.players[3]];
+        }
     }
 }
