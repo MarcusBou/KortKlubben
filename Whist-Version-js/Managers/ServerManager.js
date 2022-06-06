@@ -59,11 +59,9 @@ var ServerManager = /** @class */ (function () {
      */
     ServerManager.prototype.CheckID = function (id) {
         var valid = true;
-        this.activeRooms.forEach(function (room) {
-            if (room.getId == id) {
-                valid = false;
-            }
-        });
+        if (this.ActiveIds.includes(id)) {
+            valid = false;
+        }
         return valid;
     };
     return ServerManager;
