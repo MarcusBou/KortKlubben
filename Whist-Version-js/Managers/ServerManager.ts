@@ -39,14 +39,45 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
     }
 
     OnCreateRoomMessage(): String {
-
-        return "yip";
+        let id = this.CreateRandom();
+        let created = true;
+        while(created){
+            if(this.CheckID(id)){
+                this.AddRoom(id);
+            }
+            else{
+                id = this.CreateRandom();
+            }
+        }
+        return id;
     }
 
     OnRoomListRequest(): String{
         return "wee";
     }
 
+    /**
+     * Returns an id such as 0984
+     */
+    CreateRandom(){
+        let random = Math.floor(Math.random()*1000);
+        let id = String(random).padStart(4, '0');
+        return id;
+    }
+
+    /**
+     * Checks if id is valid and not taken by another room
+     * @param id that needs checking
+     */
+    CheckID(id){
+        let valid = true;
+        this.activeRooms.forEach(room => {
+            if(room.getId == id){
+                valid = false;
+            }
+        });
+        return valid;
+    }
 
 }
 

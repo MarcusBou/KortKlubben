@@ -1,6 +1,16 @@
 "use strict";
 exports.__esModule = true;
+var GameManager_1 = require("./GameManager");
 var RestApi_1 = require("../RestApi/RestApi");
+/**
+ *
+ * Class for servermanager
+ *
+ * This class uses specifies for creating and controlling which gamemanagers and games shall be made
+ *
+ * @version 1.0
+ * @author Marcus
+ */
 var ServerManager = /** @class */ (function () {
     function ServerManager() {
         this.CreateRoom = new RestApi_1.RestApi(this, this);
@@ -9,9 +19,9 @@ var ServerManager = /** @class */ (function () {
      * Creates room with
      * @param id For logging later
      */
-    /*AddRoom(id) {
-        //this.activeRooms.push(new GameManager(id));
-    }*/
+    ServerManager.prototype.AddRoom = function (id) {
+        this.activeRooms.push(new GameManager_1.GameManager(id));
+    };
     /**
      * Gets list of rooms
      * @returns list of the active rooms
@@ -19,12 +29,42 @@ var ServerManager = /** @class */ (function () {
     ServerManager.prototype.GetListOfRooms = function () {
         return this.activeRooms;
     };
-    ServerManager.prototype.OnMessage = function () {
-        console.log("Method not implemented.");
-        return "yip";
+    ServerManager.prototype.OnCreateRoomMessage = function () {
+        var id = this.CreateRandom();
+        var created = true;
+        while (created) {
+            if (this.CheckID(id)) {
+                this.AddRoom(id);
+            }
+            else {
+                id = this.CreateRandom();
+            }
+        }
+        return id;
     };
-    ServerManager.prototype.OnRequest = function () {
+    ServerManager.prototype.OnRoomListRequest = function () {
         return "wee";
+    };
+    /**
+     * Returns an id such as 0984
+     */
+    ServerManager.prototype.CreateRandom = function () {
+        var random = Math.floor(Math.random() * 1000);
+        var id = String(random).padStart(4, '0');
+        return id;
+    };
+    /**
+     * Checks if id is valid and not taken by another room
+     * @param id that needs checking
+     */
+    ServerManager.prototype.CheckID = function (id) {
+        var valid = true;
+        this.activeRooms.forEach(function (room) {
+            if (room.getId == id) {
+                valid = false;
+            }
+        });
+        return valid;
     };
     return ServerManager;
 }());

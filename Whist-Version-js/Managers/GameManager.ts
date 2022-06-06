@@ -1,5 +1,5 @@
 export class GameManager{
-    private id: number;
+    private id: string;
     constructor(id){
         this.id = id;
     }
