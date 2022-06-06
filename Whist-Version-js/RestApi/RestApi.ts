@@ -46,14 +46,14 @@ export class RestApi{
          * When get request is received it sends message to listener
          */
         this.router.get("/CreateRoom", (req, res)=>{
-            res.send(this.crListener.OnMessage());
+            res.send(this.crListener.OnCreateRoomMessage());
         })
 
         /**
          * When get request is received gets list from listener
          */
         this.router.get("/RoomList", (req, res)=>{
-            res.send(this.glrListener.OnRequest());
+            res.send(this.glrListener.OnRoomListRequest());
         })
 
         /**

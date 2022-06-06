@@ -38,12 +38,12 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
         return this.activeRooms;
     }
 
-    OnMessage(): String {
+    OnCreateRoomMessage(): String {
+
         return "yip";
     }
 
-    OnRequest(): String{
-        
+    OnRoomListRequest(): String{
         return "wee";
     }
 

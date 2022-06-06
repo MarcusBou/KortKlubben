@@ -1,8 +1,8 @@
 import { GameManager } from "../Managers/GameManager";
 
 export interface CreateRoomListener{
-    OnMessage(): String;
+    OnCreateRoomMessage(): String;
 }
 export interface GetListOfRoomsListener{
-    OnRequest(): String;
+    OnRoomListRequest(): String;
 }
