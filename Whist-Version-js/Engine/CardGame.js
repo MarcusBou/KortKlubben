@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.CardGame = void 0;
+var Dealer_1 = require("./Dealer");
 var Deck_1 = require("./Deck");
 /**
  * Class for CardGame
@@ -11,8 +12,13 @@ var Deck_1 = require("./Deck");
  * @author Tobias
  */
 var CardGame = /** @class */ (function () {
+    /**
+     * Constructor
+     */
     function CardGame() {
-        this.deck = new Deck_1.Deck([]);
+        this.deck = new Deck_1.Deck();
+        this.dealer = new Dealer_1.Dealer();
+        this.players = new Array();
     }
     /**
      * Get the players
@@ -42,16 +48,27 @@ var CardGame = /** @class */ (function () {
     CardGame.prototype.setDeck = function (deck) {
         this.deck = deck;
     };
+    /**
+     * Method to start the game
+     */
     CardGame.prototype.Start = function () {
-        for (var i = 0; i < 10; i++) {
-            console.log(i);
-        }
     };
+    /**
+     * Method for while the game is running
+     */
     CardGame.prototype.Running = function () {
-        throw new Error("Method not implemented.");
     };
+    /**
+     * Method to end the game
+     */
     CardGame.prototype.End = function () {
-        throw new Error("Method not implemented.");
+    };
+    /**
+     * Method to add a player to the "table"
+     * @param player
+     */
+    CardGame.prototype.addPlayer = function (player) {
+        this.players.push(player);
     };
     return CardGame;
 }());

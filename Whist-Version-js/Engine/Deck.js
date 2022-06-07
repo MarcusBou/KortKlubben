@@ -14,13 +14,8 @@ var Deck = /** @class */ (function () {
      * Constructor
      * @param cards Cards for the deck
      */
-    function Deck(myarray) {
-        if (myarray.length == 0) {
-            this.cards = new Array();
-        }
-        if (myarray.length == 1) {
-            this.cards = myarray[0];
-        }
+    function Deck() {
+        this.cards = new Array();
     }
     /**
      * Get the deck

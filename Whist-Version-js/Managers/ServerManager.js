@@ -55,7 +55,7 @@ var ServerManager = /** @class */ (function () {
      * @returns JSON String with all the active Rooms
      */
     ServerManager.prototype.OnRoomListRequest = function () {
-        var roomlist = JSON.stringify(this.ActiveIds);
+        var roomlist = JSON.stringify(this.activeRooms);
         return roomlist;
     };
     /**
@@ -72,7 +72,6 @@ var ServerManager = /** @class */ (function () {
      */
     ServerManager.prototype.CheckID = function (id) {
         var valid = true;
-        console.log(this.ActiveIds);
         if (this.ActiveIds.includes(id)) {
             valid = false;
         }
