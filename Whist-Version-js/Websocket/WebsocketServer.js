@@ -73,9 +73,6 @@ var WebSocketServern = /** @class */ (function () {
     return WebSocketServern;
 }());
 exports.WebSocketServern = WebSocketServern;
-
-let kage = new WebSocketServern();
-kage.addActiveRoom(2002);
 // var WebSocketServer = require('websocket').server;
 // //var http = require('http');
 // var connections = [];
