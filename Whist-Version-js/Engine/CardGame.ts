@@ -58,6 +58,7 @@ export abstract class CardGame implements IGameEngine {
         this.dealer = new Dealer();
         this.players = new Array<Player>();
     }
+    
 
     //Boolean to check if the game is still running
     protected isRunning: boolean;
@@ -92,6 +93,11 @@ export abstract class CardGame implements IGameEngine {
     public addPlayer(player: Player): void {
         this.players.push(player);
     }
-
-    public abstract onCommandRecieved(command: string): void;
+    
+    /**
+     * Method when command is received in game
+     * @param command 
+     */
+     onCommandRecieved(command: string): void {
+    }
 }
