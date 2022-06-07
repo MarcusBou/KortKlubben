@@ -1,54 +1,44 @@
-import * as ws from "websocket";
-import http from 'http'
-import { WSUser } from "./WSUser";
-
-export class WebSocketServern {
-    private server: http.Server;
-    private ws: ws.server;
-    private activeRooms: Array<string>;
-    private sessions: Array<WSUser>;
-
-    constructor() {
-        this.activeRooms = new Array<string>();
-        this.sessions = new Array<WSUser>();
-
-        this.server = http.createServer(function (request, response) {
+"use strict";
+exports.__esModule = true;
+exports.WebSocketServern = void 0;
+var ws = require("websocket");
+var http_1 = require("http");
+var WSUser_1 = require("./WSUser");
+var WebSocketServern = /** @class */ (function () {
+    function WebSocketServern() {
+        var _this = this;
+        this.activeRooms = new Array();
+        this.sessions = new Array();
+        this.server = http_1.createServer(function (request, response) {
             console.log((new Date()) + ': Recieved request for ' + request.url);
             response.writeHead(404);
             response.end();
         });
-
-        this.server.listen(5000, function()  {
+        this.server.listen(5000, function () {
             console.log((new Date()) + ': Server port is 5000');
         });
-
-        this.ws = new ws.server({httpServer: this.server, autoAcceptConnections: false});
-
-        this.ws.on('request', (data: ws.request) => {
-
-            let path: Array<string> = this.getPathArray(data.resourceURL.path);
+        this.ws = new ws.server({ httpServer: this.server, autoAcceptConnections: false });
+        this.ws.on('request', function (data) {
+            var path = _this.getPathArray(data.resourceURL.path);
             if (path.length != 2) {
+                console.log(path);
                 data.reject(404, "url isnt set currectly");
             }
             else {
-
-                let roomID: string = path[0];
-                let username: string = path[1];
-                let roomFound: boolean = false;
-
-                console.log(roomID);
-                console.log(username);
-
-                this.activeRooms.forEach(room => {
-                    if (room == roomID && !roomFound) {
-                        let session: ws.connection = data.accept();
-                        let user: WSUser = new WSUser(session, room, username);
-                        this.sessions.push(user);
-                        roomFound = true;
+                var roomID_1 = Number.parseInt(path[0]);
+                var username_1 = path[1];
+                var roomFound_1 = false;
+                console.log(roomID_1);
+                console.log(username_1);
+                _this.activeRooms.forEach(function (room) {
+                    if (room == roomID_1 && !roomFound_1) {
+                        var session = data.accept();
+                        var user = new WSUser_1.WSUser(session, room, username_1);
+                        _this.sessions.push(user);
+                        roomFound_1 = true;
                     }
                 });
-                
-                if (!roomFound) {
+                if (!roomFound_1) {
                     data.reject();
                 }
             }
@@ -62,59 +52,53 @@ export class WebSocketServern {
         //     })
         // })
     }
-
-    private originIsAllow(origin): boolean {
+    WebSocketServern.prototype.originIsAllow = function (origin) {
         return true;
-    }
-
-    private getPathArray(path: string) : Array<string> {
-        let result = path.split('/');
-        if(path[0] == '/') {
-            result.splice(0, 1)
+    };
+    WebSocketServern.prototype.getPathArray = function (path) {
+        var result = path.split('/');
+        if (path[0] == '/') {
+            result.splice(0, 1);
         }
         return result;
-    }
-
-    public addActiveRoom(roomid: string): void {
+    };
+    WebSocketServern.prototype.addActiveRoom = function (roomid) {
         this.activeRooms.push(roomid);
-    }
-
-    public removeActiveRoom(roomID: string): void {
-        for (let i = 0; i < this.activeRooms.length; i++) {
+    };
+    WebSocketServern.prototype.removeActiveRoom = function (roomID) {
+        for (var i = 0; i < this.activeRooms.length; i++) {
             this.activeRooms.splice(i, 1);
         }
-    }
-}
+    };
+    return WebSocketServern;
+}());
+exports.WebSocketServern = WebSocketServern;
 
+let kage = new WebSocketServern();
+kage.addActiveRoom(2002);
 // var WebSocketServer = require('websocket').server;
 // //var http = require('http');
 // var connections = [];
-
 // // var server = new http.createServer(function (request, response) {
 // //     console.log((new Date()) + ': Recieved request for ' + request.url);
 // //     response.writeHead(404);
 // //     response.end();
 // // });
-
 // server.listen(5000, function() {
 //     console.log((new Date()) + ': Server port is 5000');
 // });
-
 // var wsServer = new WebSocketServer({
 //     httpServer: server,
 //     autoAcceptConnections: false,
 // });
-
 // function originIsAllowed(origin) {
 //     console.log(origin)
 //     // put logic here to detect whether the specified origin is allowed.
 //     return true;
 // }
-
 // wsServer.on('open', function(data) {
 //     console.log("server open");
 // })
-
 // wsServer.on('request', function(request) {
 //     if (!originIsAllowed(request.origin)) {
 //         // Make sure we only accept requests from an allowed origin
@@ -122,7 +106,6 @@ export class WebSocketServern {
 //         console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
 //         return;
 //     }
-
 //     var connection = request.accept();
 //     connections.push(connection);
 //     console.log(connections);
@@ -147,8 +130,6 @@ export class WebSocketServern {
 //         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
 //     });
 // });
-
-
 // wsServer.on('connection', function(requset) {
 //     var connection = request.accept();
 //     console.log("someone connected");
