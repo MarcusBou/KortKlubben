@@ -10,20 +10,22 @@ export class WebSocketServer {
     private sessions: Array<WSUser>;
     private listeners: Array<WSlistener>;
 
-    constructor() {
+    constructor(server: http.Server) {
         this.activeRooms = new Array<string>();
         this.sessions = new Array<WSUser>();
         this.listeners = new Array<WSlistener>();
 
-        this.server = http.createServer(function (request, response) {
-            console.log((new Date()) + ': Recieved request for ' + request.url);
-            response.writeHead(404);
-            response.end();
-        });
+        // this.server = http.createServer(function (request, response) {
+        //     console.log((new Date()) + ': Recieved request for ' + request.url);
+        //     response.writeHead(404);
+        //     response.end();
+        // });
 
-        this.server.listen(5000, function()  {
-            console.log((new Date()) + ': Server port is 5000');
-        });
+        this.server = server;
+
+        // this.server.listen(5000, function()  {
+        //     console.log((new Date()) + ': Server port is 5000');
+        // });
 
         this.ws = new ws.server({httpServer: this.server, autoAcceptConnections: false});
 
