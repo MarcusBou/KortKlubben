@@ -1,71 +1,132 @@
-var WebSocketServer = require('websocket').server;
-var http = require('http');
-var connections = [];
+import * as ws from "websocket";
+import * as http from 'http'
+import { WSUser } from "./WSUser";
+import { WSlistener } from "../Listeners/WsListener";
 
-var server = new http.createServer(function (request, response) {
-    console.log((new Date()) + ': Recieved request for ' + request.url);
-    response.writeHead(404);
-    response.end();
-});
+export class WebSocketServer {
+    private server: http.Server;
+    private ws: ws.server;
+    private activeRooms: Array<string>;
+    private sessions: Array<WSUser>;
+    private listeners: Array<WSlistener>;
 
-server.listen(5000, function() {
-    console.log((new Date()) + ': Server port is 5000');
-});
+    constructor() {
+        this.activeRooms = new Array<string>();
+        this.sessions = new Array<WSUser>();
+        this.listeners = new Array<WSlistener>();
 
-var wsServer = new WebSocketServer({
-    httpServer: server,
-    autoAcceptConnections: false,
-});
+        this.server = http.createServer(function (request, response) {
+            console.log((new Date()) + ': Recieved request for ' + request.url);
+            response.writeHead(404);
+            response.end();
+        });
 
-function originIsAllowed(origin) {
-    console.log(origin)
-    // put logic here to detect whether the specified origin is allowed.
-    return true;
-}
+        this.server.listen(5000, function()  {
+            console.log((new Date()) + ': Server port is 5000');
+        });
 
-wsServer.on('open', function(data) {
-    console.log("server open");
-})
+        this.ws = new ws.server({httpServer: this.server, autoAcceptConnections: false});
 
-wsServer.on('request', function(request) {
-    if (!originIsAllowed(request.origin)) {
-        // Make sure we only accept requests from an allowed origin
-        request.reject();
-        console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
-        return;
+        this.ws.on('request', (data: ws.request) => {
+
+            let path: Array<string> = this.getPathArray(data.resourceURL.path);
+            if (path.length != 2) {
+                data.reject(404, "url isnt set currectly");
+            }
+            else {
+
+                let roomID: string = path[0];
+                let username: string = path[1];
+                let roomFound: boolean = false;
+
+                console.log(roomID);
+                console.log(username);
+
+                this.activeRooms.forEach(room => {
+                    if (room == roomID && !roomFound) {
+                        let session: ws.connection = data.accept();
+                        let user: WSUser = new WSUser(session, room, username);
+                        this.sessions.push(user);
+                        roomFound = true;
+                        user.getSession().on("message", (message: ws.Message) => {
+                            if (message.type === "utf8") {
+                                this.NotifyOnMessage(message.utf8Data);
+                            }
+                        });
+                        user.getSession().on('close', () => {
+                            for (let i = 0; i < this.sessions.length; i++) {
+                                if (this.sessions[i] == user) {
+                                    this.sessions.splice(i, 1);
+                                }
+                            }
+                        });
+                    }
+                });
+                if (!roomFound) {
+                    data.reject();
+                }
+            }
+        });
     }
 
-    var connection = request.accept();
-    connections.push(connection);
-    console.log(connections);
-    connection.on('message', function(message) {
-        if (message.type === 'utf8') {
-            console.log('Message Received: ' + message.utf8Data)
-            connections.forEach(con => {
-                con.sendUTF('Server Received: '+message.utf8Data);
-            });
-        } else if (message.binaryData) {
-            console.log('Message Received: ' + message.binaryData);
-            connection.sendBytes(message.binaryData);
+    private originIsAllow(origin): boolean {
+        return true;
+    }
+
+    private getPathArray(path: string) : Array<string> {
+        let result = path.split('/');
+        if(path[0] == '/') {
+            result.splice(0, 1)
         }
-    });
-    connection.on('close', function(reasonCode, description) {
-        for( var i = 0; i < connections.length; i++){ 
-            if ( connections[i] === connection) { 
-                connections.splice(i, 1); 
+        return result;
+    }
+
+    public addActiveRoom(roomid: string): void {
+        this.activeRooms.push(roomid);
+    }
+
+    public removeActiveRoom(roomID: string): void {
+        for (let i = 0; i < this.activeRooms.length; i++) {
+            if (this.activeRooms[i] == roomID) {
+                this.activeRooms.splice(i, 1);
             }
         }
-        console.log(connections);
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
-    });
-});
+    }
 
+    public addListener(listener: WSlistener) {
+        this.listeners.push(listener);
+    }
+    
+    public removeListener(listener: WSlistener) {
+        for (let i = 0; i < this.listeners.length; i++) {
+            if (this.listeners[i] == listener) {
+                this.listeners.splice(i, 1);
+            }
+        }
+    }
+    
+    private NotifyOnMessage(message: string) {
+        this.listeners.forEach(listener => {
+            listener.CommandReceived(message);
+        });
+    }
 
-wsServer.on('connection', function(requset) {
-    var connection = request.accept();
-    console.log("someone connected");
-    console.log(requset);
-    connection.on('message', function(data) {
-        console.log(data);
-    })
-});
+    public broadcastRoom(roomID: string, message: string): void {
+        this.sessions.forEach(session => {
+            if (session.getRoomID() == roomID) {
+                session.getSession().sendUTF(message);
+            }
+        });
+    }
+
+    public broadcastUsername(username: string, message: string) {
+        this.sessions.forEach(session => {
+            if (session.getUsername() == username) {
+                session.getSession().sendUTF(message);
+            }
+        });
+    }
+}
+
+// let kage = new WebSocketServer();
+// kage.addActiveRoom("2002");
