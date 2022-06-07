@@ -19,14 +19,15 @@ export class GameManager implements WSlistener, IGameListener{
         this.ws.addActiveRoom(id);
     }
     onPlayerJoin(roomID: string, username: string) {
-        throw new Error("Method not implemented.");
+        console.log("Awesome " + username + " joined");
     }
     onPlayerDisconnected(roomID: string, username: string) {
-        throw new Error("Method not implemented.");
+        console.log(username + " disconnected");
     }
     
     CommandReceived(jsonstring: string) {
-        this.game.onCommandRecieved(jsonstring);
+        let command = JSON.parse(jsonstring);
+        this.game.onCommandRecieved(command.Command);
     }
 
     onResponse(response: string) {

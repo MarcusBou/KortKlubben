@@ -35,6 +35,7 @@ var WebSocketServer = /** @class */ (function () {
                         var session = data.accept();
                         var user_1 = new WSUser_1.WSUser(session, room, username_1);
                         _this.sessions.push(user_1);
+                        _this.NotifyOnUserJoined(user_1.getRoomID(), user_1.getUsername());
                         roomFound_1 = true;
                         user_1.getSession().on("message", function (message) {
                             if (message.type === "utf8") {
@@ -45,6 +46,7 @@ var WebSocketServer = /** @class */ (function () {
                             for (var i = 0; i < _this.sessions.length; i++) {
                                 if (_this.sessions[i] == user_1) {
                                     _this.sessions.splice(i, 1);
+                                    _this.NnotifyOnUserDisconnect(user_1.getRoomID(), user_1.getUsername());
                                 }
                             }
                         });
@@ -89,6 +91,16 @@ var WebSocketServer = /** @class */ (function () {
     WebSocketServer.prototype.NotifyOnMessage = function (message) {
         this.listeners.forEach(function (listener) {
             listener.CommandReceived(message);
+        });
+    };
+    WebSocketServer.prototype.NotifyOnUserJoined = function (roomID, username) {
+        this.listeners.forEach(function (listener) {
+            listener.onPlayerJoin(roomID, username);
+        });
+    };
+    WebSocketServer.prototype.NnotifyOnUserDisconnect = function (roomID, username) {
+        this.listeners.forEach(function (listener) {
+            listener.onPlayerDisconnected(roomID, username);
         });
     };
     WebSocketServer.prototype.broadcastRoom = function (roomID, message) {

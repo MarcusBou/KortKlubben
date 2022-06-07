@@ -13,8 +13,15 @@ var GameManager = /** @class */ (function () {
         this.ws.addListener(this);
         this.ws.addActiveRoom(id);
     }
+    GameManager.prototype.onPlayerJoin = function (roomID, username) {
+        console.log("Awesome " + username + " joined");
+    };
+    GameManager.prototype.onPlayerDisconnected = function (roomID, username) {
+        console.log(username + " disconnected");
+    };
     GameManager.prototype.CommandReceived = function (jsonstring) {
-        this.game.onCommandRecieved(jsonstring);
+        var command = JSON.parse(jsonstring);
+        this.game.onCommandRecieved(command.Command);
     };
     GameManager.prototype.onResponse = function (response) {
         throw new Error("Method not implemented.");
