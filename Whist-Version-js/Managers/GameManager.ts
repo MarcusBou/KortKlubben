@@ -11,4 +11,6 @@ export class GameManager{
     public getId(){
         return this.id;
     }
+
+    
 }

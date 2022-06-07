@@ -67,7 +67,7 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
      * @returns JSON String with all the active Rooms
      */
     OnRoomListRequest(): String{
-        let roomlist = JSON.stringify(this.ActiveIds);
+        let roomlist = JSON.stringify(this.activeRooms);
         return roomlist;
     }
 
