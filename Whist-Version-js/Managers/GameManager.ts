@@ -11,12 +11,18 @@ export class GameManager implements WSlistener, IGameListener{
     private game: IGameEngine;
     private ws : WebSocketServer;
 
-    constructor(id, server){
+    constructor(id, server: WebSocketServer){
         this.id = id;
         this.game = new WhistGame();
-        this.ws = new WebSocketServer(server);
+        this.ws = server;
         this.ws.addListener(this); 
         this.ws.addActiveRoom(id);
+    }
+    onPlayerJoin(roomID: string, username: string) {
+        throw new Error("Method not implemented.");
+    }
+    onPlayerDisconnected(roomID: string, username: string) {
+        throw new Error("Method not implemented.");
     }
     
     CommandReceived(jsonstring: string) {

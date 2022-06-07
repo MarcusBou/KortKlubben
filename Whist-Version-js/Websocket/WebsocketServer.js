@@ -9,7 +9,15 @@ var WebSocketServer = /** @class */ (function () {
         this.activeRooms = new Array();
         this.sessions = new Array();
         this.listeners = new Array();
+        // this.server = http.createServer(function (request, response) {
+        //     console.log((new Date()) + ': Recieved request for ' + request.url);
+        //     response.writeHead(404);
+        //     response.end();
+        // });
         this.server = server;
+        // this.server.listen(5000, function()  {
+        //     console.log((new Date()) + ': Server port is 5000');
+        // });
         this.ws = new ws.server({ httpServer: this.server, autoAcceptConnections: false });
         this.ws.on('request', function (data) {
             var path = _this.getPathArray(data.resourceURL.path);
