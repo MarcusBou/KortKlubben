@@ -19,5 +19,8 @@ export interface IGameEngine {
      */
     End(): void;
     
-    //setListener(listener: GameListener): void;
+    /**
+     * abstract method for when commannd is received through ws
+     */
+    onCommandRecieved(command: string): void;
 }
