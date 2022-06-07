@@ -7,10 +7,12 @@ var WebsocketServer_1 = require("../Websocket/WebsocketServer");
  * Class for controlling the communication between the game and clients
  */
 var GameManager = /** @class */ (function () {
-    function GameManager(id) {
+    function GameManager(id, server) {
         this.id = id;
         this.game = new WhistGame_1.WhistGame();
-        this.ws = new WebsocketServer_1.WebSocketServern();
+        this.ws = new WebsocketServer_1.WebSocketServer(server);
+        this.ws.addListener(this);
+        this.ws.addActiveRoom(id);
     }
     GameManager.prototype.CommandReceived = function (jsonstring) {
         this.game.onCommandRecieved(jsonstring);

@@ -2,6 +2,7 @@
 exports.__esModule = true;
 var GameManager_1 = require("./GameManager");
 var RestApi_1 = require("../RestApi/RestApi");
+var http = require("http");
 /**
  *
  * Class for servermanager
@@ -16,13 +17,21 @@ var ServerManager = /** @class */ (function () {
         this.api = new RestApi_1.RestApi(this, this);
         this.activeRooms = new Array();
         this.activeIds = new Array();
+        this.WsHttp = http.createServer(function (request, response) {
+            console.log((new Date()) + ': Recieved request for ' + request.url);
+            response.writeHead(404);
+            response.end();
+        });
+        this.WsHttp.listen(5000, function () {
+            console.log((new Date()) + ': Server port is 5000');
+        });
     }
     /**
      * Creates room with
      * @param id For logging later
      */
     ServerManager.prototype.AddRoom = function (id) {
-        this.activeRooms.push(new GameManager_1.GameManager(id));
+        this.activeRooms.push(new GameManager_1.GameManager(id, this.WsHttp));
     };
     /**
      * Gets list of rooms

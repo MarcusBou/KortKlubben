@@ -2,22 +2,14 @@
 exports.__esModule = true;
 exports.WebSocketServer = void 0;
 var ws = require("websocket");
-var http = require("http");
 var WSUser_1 = require("./WSUser");
 var WebSocketServer = /** @class */ (function () {
-    function WebSocketServer() {
+    function WebSocketServer(server) {
         var _this = this;
         this.activeRooms = new Array();
         this.sessions = new Array();
         this.listeners = new Array();
-        this.server = http.createServer(function (request, response) {
-            console.log((new Date()) + ': Recieved request for ' + request.url);
-            response.writeHead(404);
-            response.end();
-        });
-        this.server.listen(5000, function () {
-            console.log((new Date()) + ': Server port is 5000');
-        });
+        this.server = server;
         this.ws = new ws.server({ httpServer: this.server, autoAcceptConnections: false });
         this.ws.on('request', function (data) {
             var path = _this.getPathArray(data.resourceURL.path);

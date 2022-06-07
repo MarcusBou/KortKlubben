@@ -2,19 +2,21 @@ import { IGameEngine } from "../Engine/IGameEngine";
 import { IGameListener } from "../Engine/IGameListener";
 import { WhistGame } from "../Games/WhistGame";
 import { WSlistener } from "../Listeners/WsListener";
-import { WebSocketServern } from "../Websocket/WebsocketServer";
+import { WebSocketServer } from "../Websocket/WebsocketServer";
 /**
  * Class for controlling the communication between the game and clients
  */
 export class GameManager implements WSlistener, IGameListener{
     private id: string;
     private game: IGameEngine;
-    private ws : WebSocketServern;
+    private ws : WebSocketServer;
 
-    constructor(id){
+    constructor(id, server){
         this.id = id;
         this.game = new WhistGame();
-        this.ws = new WebSocketServern();
+        this.ws = new WebSocketServer(server);
+        this.ws.addListener(this); 
+        this.ws.addActiveRoom(id);
     }
     
     CommandReceived(jsonstring: string) {
