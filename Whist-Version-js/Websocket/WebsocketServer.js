@@ -21,11 +21,10 @@ var WebSocketServern = /** @class */ (function () {
         this.ws.on('request', function (data) {
             var path = _this.getPathArray(data.resourceURL.path);
             if (path.length != 2) {
-                console.log(path);
                 data.reject(404, "url isnt set currectly");
             }
             else {
-                var roomID_1 = Number.parseInt(path[0]);
+                var roomID_1 = path[0];
                 var username_1 = path[1];
                 var roomFound_1 = false;
                 console.log(roomID_1);

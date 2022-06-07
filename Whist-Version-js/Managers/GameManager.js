@@ -2,11 +2,15 @@
 exports.__esModule = true;
 exports.GameManager = void 0;
 var WhistGame_1 = require("../Games/WhistGame");
+var WebsocketServer_1 = require("../Websocket/WebsocketServer");
+/**
+ * Class for controlling the communication between the game and clients
+ */
 var GameManager = /** @class */ (function () {
     function GameManager(id) {
         this.id = id;
         this.game = new WhistGame_1.WhistGame();
-        this.game.onCommandRecieved("wee");
+        this.ws = new WebsocketServer_1.WebSocketServern();
     }
     GameManager.prototype.CommandReceived = function (jsonstring) {
         this.game.onCommandRecieved(jsonstring);

@@ -70,6 +70,12 @@ var CardGame = /** @class */ (function () {
     CardGame.prototype.addPlayer = function (player) {
         this.players.push(player);
     };
+    /**
+     * Method when command is received in game
+     * @param command
+     */
+    CardGame.prototype.onCommandRecieved = function (command) {
+    };
     return CardGame;
 }());
 exports.CardGame = CardGame;
