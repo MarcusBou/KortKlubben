@@ -13,9 +13,9 @@ var RestApi_1 = require("../RestApi/RestApi");
  */
 var ServerManager = /** @class */ (function () {
     function ServerManager() {
-        this.CreateRoom = new RestApi_1.RestApi(this, this);
+        this.api = new RestApi_1.RestApi(this, this);
         this.activeRooms = new Array();
-        this.ActiveIds = new Array();
+        this.activeIds = new Array();
     }
     /**
      * Creates room with
@@ -41,7 +41,7 @@ var ServerManager = /** @class */ (function () {
         while (created) {
             if (this.CheckID(id)) {
                 this.AddRoom(id);
-                this.ActiveIds.push(id);
+                this.activeIds.push(id);
                 created = false;
             }
             else {
@@ -72,7 +72,7 @@ var ServerManager = /** @class */ (function () {
      */
     ServerManager.prototype.CheckID = function (id) {
         var valid = true;
-        if (this.ActiveIds.includes(id)) {
+        if (this.activeIds.includes(id)) {
             valid = false;
         }
         return valid;
