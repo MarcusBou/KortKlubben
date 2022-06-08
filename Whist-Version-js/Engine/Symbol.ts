@@ -1,6 +1,6 @@
-export enum Symbol {
-    Spades,
-    Heart,
-    Clubs,
-    Diamond
+export const Symbol = {
+    Spades: "Spades",
+    Heart: "Heart",
+    Clubs : "Clubs",
+    Diamond : "Diamond"
 }

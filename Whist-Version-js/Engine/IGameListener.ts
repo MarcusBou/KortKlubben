@@ -1,5 +1,5 @@
 export interface IGameListener {
 
-    onResponse(game: string, command: string, information: any);
-
+    onDirectMessageResponse(user: string,game: string, command: string, information: any);
+    onBroadcastMessageResponse(game: string, command: string, information: any);
 }

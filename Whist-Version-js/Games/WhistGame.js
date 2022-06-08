@@ -20,6 +20,7 @@ var Card_1 = require("../Engine/Card");
 var CardGame_1 = require("../Engine/CardGame");
 var Deck_1 = require("../Engine/Deck");
 var Decks_1 = require("../Engine/Decks");
+var Symbol_1 = require("../Engine/Symbol");
 var WhistGame = /** @class */ (function (_super) {
     __extends(WhistGame, _super);
     function WhistGame(listener) {
@@ -50,8 +51,10 @@ var WhistGame = /** @class */ (function (_super) {
             this.dealtCards = new Map();
             for (var i = 0; i < this.players.length; i++) {
                 this.cardPlayed = null;
+                this.playerTurn = this.players[i];
+                this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(), "Whist", "turn", "");
                 //Waiting for card to play
-                while (this.cardPlayed == null) { }
+                //while (this.cardPlayed == null) {}
                 //Player at index plays a Card
                 var card = this.players[i].playCard(this.cardPlayed);
                 if (card != null) {
@@ -141,6 +144,7 @@ var WhistGame = /** @class */ (function (_super) {
         for (var i = 0; i < this.players.length; i++) {
             //Set the hand for each player
             this.players[i].SetHand(hands[i]);
+            this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(), "Whist", "dealtHand", JSON.stringify(hands[i]));
         }
     };
     /**
@@ -176,25 +180,43 @@ var WhistGame = /** @class */ (function (_super) {
     /**
      * For when command is received, read through the command and do something
      */
-    WhistGame.prototype.onCommandRecieved = function (message) {
+    WhistGame.prototype.onCommandRecieved = function (username, message) {
         if (message.game == "Whist") {
             switch (message.command) {
                 case "start":
                     this.Start();
                     break;
                 case "playCard":
-                    this.setcard(message.info);
+                    this.setcard(username, message.info);
                     break;
                 default:
                     console.log("no command received");
+                    this.responseListener.onDirectMessageResponse(username, "Whist", "Error", "Not a valid commande received");
                     break;
             }
         }
         else {
-            this.responseListener.onResponse("Whist", "Error", "Not a command intended for whist");
+            this.responseListener.onDirectMessageResponse(username, "Whist", "Error", "Not a command intended for whist");
         }
     };
-    WhistGame.prototype.setcard = function (information) {
+    WhistGame.prototype.setcard = function (username, information) {
+        if (username == this.playerTurn.GetUsername()) {
+            var symbol = void 0;
+            if (information.symbol == Symbol_1.Symbol.Clubs) {
+                symbol = Symbol_1.Symbol.Clubs;
+            }
+            else if (information.symbol == Symbol_1.Symbol.Diamond) {
+                symbol = Symbol_1.Symbol.Diamond;
+            }
+            else if (information.symbol == Symbol_1.Symbol.Heart) {
+                symbol = Symbol_1.Symbol.Heart;
+            }
+            else if (information.symbol == Symbol_1.Symbol.Spades) {
+                symbol = Symbol_1.Symbol.Spades;
+            }
+            this.cardPlayed = new Card_1.Card(symbol, information.number);
+            console.log(username + " has played");
+        }
     };
     return WhistGame;
 }(CardGame_1.CardGame));

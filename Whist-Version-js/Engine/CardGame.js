@@ -75,7 +75,7 @@ var CardGame = /** @class */ (function () {
      * Method when command is received in game
      * @param command
      */
-    CardGame.prototype.onCommandRecieved = function (command) {
+    CardGame.prototype.onCommandRecieved = function (username, command) {
     };
     return CardGame;
 }());

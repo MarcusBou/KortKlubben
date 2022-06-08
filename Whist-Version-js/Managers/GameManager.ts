@@ -19,6 +19,7 @@ export class GameManager implements WSlistener, IGameListener{
         this.ws.addListener(this); 
         this.ws.addActiveRoom(id);
     }
+    
     onPlayerJoin(roomID: string, username: string) {
         this.game.addPlayer(username);
         console.log("Awesome " + username + " joined");
@@ -27,20 +28,25 @@ export class GameManager implements WSlistener, IGameListener{
         console.log(username + " disconnected");
     }
     
-    CommandReceived(roomID: string, jsonstring: string) {
-        this.ws.broadcastRoom(this.id, jsonstring);
-        /*if(roomID == this.id){
+    CommandReceived(roomID: string, username: string,jsonstring: string) {
+        if(roomID == this.id){
             try{
                 let command = JSON.parse(jsonstring);
-                this.game.onCommandRecieved(command);
+                this.game.onCommandRecieved(username,command);
             }catch(e){
+                console.log(e);
                 this.ws.broadcastRoom(this.id, "Not a valid json input");
             }
-        }*/
+        }
     }
 
-    onResponse(game: string, command: string, information: any) {
-        
+    onDirectMessageResponse(user: string,game: string, command: string, information: any) {
+        let message = this.prepareMessage(game, command, information);
+        this.ws.broadcastUsername(user, message)
+    }
+    onBroadcastMessageResponse(game: string, command: string, information: any) {
+        let message = this.prepareMessage(game, command, information);
+        this.ws.broadcastRoom(this.id, message);
     }
 
     public getId(){
@@ -48,7 +54,7 @@ export class GameManager implements WSlistener, IGameListener{
     }
     
     private prepareMessage(game: string, command: string, information: any){
-        
+        return "{\"game\":\""+ game +"\", \"command\" : \"" + command + "\", \"info\":"+ information+"}"
     }
 
 }

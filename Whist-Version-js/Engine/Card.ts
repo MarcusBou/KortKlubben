@@ -12,7 +12,7 @@ export class Card {
     //The number on the card
     private number: number;
     //Which Symbol the card has
-    private symbol: Symbol;
+    private symbol: string;
 
     /**
      * Get the number
@@ -26,7 +26,7 @@ export class Card {
      * Get the symbol
      * @return Card symbol
      */
-    public GetSymbol(): Symbol {
+    public GetSymbol(): string {
         return this.symbol;
     }
 
@@ -36,7 +36,7 @@ export class Card {
      * @param symbol Symbol of card
      * @param number Number of card
      */
-    constructor(symbol: Symbol, number: number) {
+    constructor(symbol: string, number: number) {
         this.symbol = symbol;
         this.number = number;
     }

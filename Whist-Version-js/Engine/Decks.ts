@@ -7,12 +7,9 @@ export class Decks {
 
     private static StandardCardDeck() {
         var cards: Card[] = new Array<Card>();
-        const symbols = Object.keys(Symbol).filter((item) => {
-            return isNaN(Number(item));
-        });
-        for(const symbol in symbols) {
+        for(const symbol in Symbol) {
             for(let i = 0; i < 14; i++) {
-                cards.push(new Card(parseInt(symbol), i));
+                cards.push(new Card(symbol, i));
             }
         }
         return cards;

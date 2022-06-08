@@ -1,4 +1,4 @@
-import { ESMap, sys } from "typescript";
+import { ESMap, SymbolDisplayPartKind, sys } from "typescript";
 import { Card } from "../Engine/Card";
 import { CardGame } from "../Engine/CardGame";
 import { Deck } from "../Engine/Deck";
@@ -12,7 +12,7 @@ export class WhistGame extends CardGame {
     private dealtCards: ESMap<Player, Card>;
     private playerPoints: ESMap<Player, number>;
     private cardPlayed: Card;
-    private usersTurn: Player;
+    private playerTurn: Player;
 
     public constructor(listener : IGameListener) {
         super();
@@ -39,12 +39,14 @@ export class WhistGame extends CardGame {
         let index: number = 0;
         let startPos: number = 0;
         while (this.isRunning) {
-            let symbol: Symbol;
+            let symbol: string;
             this.dealtCards = new Map<Player, Card>();
             for (let i = 0; i < this.players.length; i++) {
                 this.cardPlayed = null;
+                this.playerTurn = this.players[i];
+                this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(),"Whist", "turn", "")
                 //Waiting for card to play
-                while (this.cardPlayed == null) {}
+                //while (this.cardPlayed == null) {}
                 //Player at index plays a Card
                 let card: Card = this.players[i].playCard(this.cardPlayed);
                 if (card != null) {    
@@ -99,7 +101,7 @@ export class WhistGame extends CardGame {
      * @param symbol Symbol for the round
      * @return Player who won the stik
      */
-    private findStikWinner(symbol: Symbol): Player {
+    private findStikWinner(symbol: string): Player {
         let winner: Player = null;
         //Set the highestCard to 0
         let highestCard: Card = Card.Empty;
@@ -141,6 +143,7 @@ export class WhistGame extends CardGame {
         for (let i = 0; i < this.players.length; i++) {
             //Set the hand for each player
             this.players[i].SetHand(hands[i]);
+            this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(), "Whist", "dealtHand", JSON.stringify(hands[i]));
         }
     }
 
@@ -179,24 +182,33 @@ export class WhistGame extends CardGame {
     /**
      * For when command is received, read through the command and do something
      */
-    public onCommandRecieved(message): void {
+    public onCommandRecieved(username, message): void {
         if(message.game == "Whist"){
             switch (message.command) {
                 case "start":
                     this.Start();
                     break;
                 case "playCard":
-                        this.setcard(message.info)
+                        this.setcard(username, message.info);
                     break;
                 default:
                     console.log("no command received");
+                    this.responseListener.onDirectMessageResponse(username,"Whist", "Error" ,"Not a valid commande received");
                     break;
             }
         }else{
-            this.responseListener.onResponse("Whist", "Error" ,"Not a command intended for whist")
+            this.responseListener.onDirectMessageResponse(username, "Whist", "Error" ,"Not a command intended for whist");
         }
     }
-    private setcard(information){
-        
+    private setcard(username, information){
+        if(username == this.playerTurn.GetUsername()){
+            let symbol;
+            if(information.symbol == Symbol.Clubs){symbol = Symbol.Clubs}
+            else if(information.symbol == Symbol.Diamond){symbol = Symbol.Diamond}
+            else if(information.symbol == Symbol.Heart){symbol = Symbol.Heart}
+            else if(information.symbol == Symbol.Spades){symbol = Symbol.Spades}
+            this.cardPlayed = new Card(symbol, information.number);
+            console.log(username + " has played")
+        }
     }
 }

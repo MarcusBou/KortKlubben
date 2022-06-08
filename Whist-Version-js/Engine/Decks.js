@@ -8,12 +8,9 @@ var Decks = /** @class */ (function () {
     }
     Decks.StandardCardDeck = function () {
         var cards = new Array();
-        var symbols = Object.keys(Symbol_1.Symbol).filter(function (item) {
-            return isNaN(Number(item));
-        });
-        for (var symbol in symbols) {
+        for (var symbol in Symbol_1.Symbol) {
             for (var i = 0; i < 14; i++) {
-                cards.push(new Card_1.Card(parseInt(symbol), i));
+                cards.push(new Card_1.Card(symbol, i));
             }
         }
         return cards;

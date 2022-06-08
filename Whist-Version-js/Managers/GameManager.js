@@ -20,23 +20,31 @@ var GameManager = /** @class */ (function () {
     GameManager.prototype.onPlayerDisconnected = function (roomID, username) {
         console.log(username + " disconnected");
     };
-    GameManager.prototype.CommandReceived = function (roomID, jsonstring) {
-        this.ws.broadcastRoom(this.id, jsonstring);
-        /*if(roomID == this.id){
-            try{
-                let command = JSON.parse(jsonstring);
-                this.game.onCommandRecieved(command);
-            }catch(e){
+    GameManager.prototype.CommandReceived = function (roomID, username, jsonstring) {
+        if (roomID == this.id) {
+            try {
+                var command = JSON.parse(jsonstring);
+                this.game.onCommandRecieved(username, command);
+            }
+            catch (e) {
+                console.log(e);
                 this.ws.broadcastRoom(this.id, "Not a valid json input");
             }
-        }*/
+        }
     };
-    GameManager.prototype.onResponse = function (game, command, information) {
+    GameManager.prototype.onDirectMessageResponse = function (user, game, command, information) {
+        var message = this.prepareMessage(game, command, information);
+        this.ws.broadcastUsername(user, message);
+    };
+    GameManager.prototype.onBroadcastMessageResponse = function (game, command, information) {
+        var message = this.prepareMessage(game, command, information);
+        this.ws.broadcastRoom(this.id, message);
     };
     GameManager.prototype.getId = function () {
         return this.id;
     };
     GameManager.prototype.prepareMessage = function (game, command, information) {
+        return "{\"game\":\"" + game + "\", \"command\" : \"" + command + "\", \"info\":" + information + "}";
     };
     return GameManager;
 }());

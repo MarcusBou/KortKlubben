@@ -98,6 +98,6 @@ export abstract class CardGame implements IGameEngine {
      * Method when command is received in game
      * @param command 
      */
-     onCommandRecieved(command: JSON): void {
+     onCommandRecieved(username: string,command: JSON): void {
     }
 }

@@ -34,23 +34,26 @@ export class Dealer {
      * @return List that has multiple list of cards
      */
      dealCards(cards: Card[], playerAmount: number): Card[][] {
-        //Calculates the hand size our from amount of players and cards size
-        var hand_size = cards.length / playerAmount;
-        var temp_hands: Card[][] = Array<Card[]>(); 
+        //Calculates the hand size our from amount of players and cards size :: Array<Array<Card>>
+        let hand_size: number = cards.length / playerAmount;
+        let temp_hands: Array<Array<Card>> = new Array<Array<Card>>();
         
         //Loop for each "player"
         for (let i = 0; i < playerAmount; i++) {
-            var temp_cards = Card[hand_size];
+            var temp_cards: Array<Card> = new Array<Card>();
             //Loop hand_size times
             for (let j = 0; j < hand_size; j++) {
                 //Add card at index 0 to temp_cards
                 //Remove the card at index 0
-                temp_cards.push(cards.shift());
+                let card: Card = cards.shift()
+                if (card != null) {
+                    temp_cards.push(card);
+                }
             }
             //Add the list of cards to our list
             temp_hands.push(temp_cards);
         }
-        return temp_cards;
+        return temp_hands;
     }
 }
 

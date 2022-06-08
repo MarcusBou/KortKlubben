@@ -22,7 +22,7 @@ export interface IGameEngine {
     /**
      * Abstract method for when commannd is received through ws
      */
-    onCommandRecieved(command: JSON): void;
+    onCommandRecieved(username,command: JSON): void;
 
     /**
      * Adds player to playerlist in the game
