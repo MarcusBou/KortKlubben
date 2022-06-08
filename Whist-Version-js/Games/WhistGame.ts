@@ -11,6 +11,8 @@ export class WhistGame extends CardGame {
     private responseListener: IGameListener;
     private dealtCards: ESMap<Player, Card>;
     private playerPoints: ESMap<Player, number>;
+    private cardPlayed: Card;
+    private usersTurn: Player;
 
     public constructor(listener : IGameListener) {
         super();
@@ -36,24 +38,32 @@ export class WhistGame extends CardGame {
     public Running(): void {
         let index: number = 0;
         let startPos: number = 0;
-        while(this.isRunning) {
+        while (this.isRunning) {
             let symbol: Symbol;
             this.dealtCards = new Map<Player, Card>();
             for (let i = 0; i < this.players.length; i++) {
+                this.cardPlayed = null;
+                //Waiting for card to play
+                while (this.cardPlayed == null) {}
                 //Player at index plays a Card
-                let card: Card = this.players[i].playCard(0);
-                //If i is the first Position of the loop
-                if (i == startPos) {
-                    //Then set symbol for round
-                    symbol = card.GetSymbol();
+                let card: Card = this.players[i].playCard(this.cardPlayed);
+                if (card != null) {    
+                    //If i is the first Position of the loop
+                    if (i == startPos) {
+                        //Then set symbol for round
+                        symbol = card.GetSymbol();
+                    }
+                    if (index >= this.players.length - 1) {
+                        index = 0;
+                    } else {
+                        index++;
+                    }
+                    //Put the card on the table
+                    this.dealtCards.set(this.players[i], card);
                 }
-                if (index >= this.players.length - 1) {
-                    index = 0;
-                } else {
-                    index++;
+                else{
+                    i--;
                 }
-                //Put the card on the table
-                this.dealtCards.set(this.players[i], card);
             }
 
             //Find the Player who won the stik
@@ -134,20 +144,6 @@ export class WhistGame extends CardGame {
         }
     }
 
-    public onCommandRecieved(command): void {
-        
-        switch (command.command) {
-            case "start":
-                this.Start();
-                break;
-            case "playCard":
-                this.responseListener.onResponse(command.info["username"])
-                break;
-            default:
-                console.log("no command received");
-                break;
-        }
-    }
 
     /**
      * Method to check if players hands are empty
@@ -178,5 +174,29 @@ export class WhistGame extends CardGame {
         } else {
             return [this.players[1], this.players[3]];
         }
+    }
+
+    /**
+     * For when command is received, read through the command and do something
+     */
+    public onCommandRecieved(message): void {
+        if(message.game == "Whist"){
+            switch (message.command) {
+                case "start":
+                    this.Start();
+                    break;
+                case "playCard":
+                        this.setcard(message.info)
+                    break;
+                default:
+                    console.log("no command received");
+                    break;
+            }
+        }else{
+            this.responseListener.onResponse("Whist", "Error" ,"Not a command intended for whist")
+        }
+    }
+    private setcard(information){
+        
     }
 }

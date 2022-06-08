@@ -55,9 +55,16 @@ export class Player {
      * @param index Card index from hand
      * @return played card
      */
-    public playCard(index: number): Card {
-        let playCard: Card = this.hand[index];
-        this.hand.splice(index, 1);
-        return playCard;
+    public playCard(playedCard: Card): Card {
+        let card : Card = null;
+        for (let i = 0; i < this.hand.length; i++) {
+            if (this.hand[i].IsSameSymbol(playedCard.GetSymbol())) {
+                if (this.hand[i].GetNumber() == playedCard.GetNumber()) {
+                    card = this.hand[i];
+                    this.hand.splice(i, 1);
+                }
+            }
+        }
+        return card;
     }
 }

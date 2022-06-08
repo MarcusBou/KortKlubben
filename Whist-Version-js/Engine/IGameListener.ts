@@ -1,5 +1,5 @@
 export interface IGameListener {
 
-    onResponse(response: string);
+    onResponse(game: string, command: string, information: any);
 
 }

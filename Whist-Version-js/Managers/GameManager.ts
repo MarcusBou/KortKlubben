@@ -38,12 +38,16 @@ export class GameManager implements WSlistener, IGameListener{
         }
     }
 
-    onResponse(response: string) {
-        this.ws.broadcastRoom(this.id, response);
+    onResponse(game: string, command: string, information: any) {
+        
     }
 
     public getId(){
         return this.id;
+    }
+    
+    private prepareMessage(game: string, command: string, information: any){
+        
     }
 
 }
