@@ -49,16 +49,18 @@ export class WebSocketServer {
                         let session: ws.connection = data.accept();
                         let user: WSUser = new WSUser(session, room, username);
                         this.sessions.push(user);
+                        this.NotifyOnUserJoined(user.getRoomID(), user.getUsername());
                         roomFound = true;
                         user.getSession().on("message", (message: ws.Message) => {
                             if (message.type === "utf8") {
-                                this.NotifyOnMessage(message.utf8Data);
+                                this.NotifyOnMessage(user.getRoomID(), message.utf8Data);
                             }
                         });
                         user.getSession().on('close', () => {
                             for (let i = 0; i < this.sessions.length; i++) {
                                 if (this.sessions[i] == user) {
                                     this.sessions.splice(i, 1);
+                                    this.NnotifyOnUserDisconnect(user.getRoomID(), user.getUsername());
                                 }
                             }
                         });
@@ -107,9 +109,21 @@ export class WebSocketServer {
         }
     }
     
-    private NotifyOnMessage(message: string) {
+    private NotifyOnMessage(roomID: string, message: string): void {
         this.listeners.forEach(listener => {
-            listener.CommandReceived(message);
+            listener.CommandReceived(roomID, message);
+        });
+    }
+
+    private NotifyOnUserJoined(roomID: string, username: string): void {
+        this.listeners.forEach(listener => {
+            listener.onPlayerJoin(roomID, username);
+        });
+    }
+
+    private NnotifyOnUserDisconnect(roomID: string, username: string) {
+        this.listeners.forEach(listener => {
+            listener.onPlayerDisconnected(roomID, username);
         });
     }
 

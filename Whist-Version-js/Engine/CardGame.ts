@@ -90,14 +90,14 @@ export abstract class CardGame implements IGameEngine {
      * Method to add a player to the "table"
      * @param player
      */
-    public addPlayer(player: Player): void {
-        this.players.push(player);
+    public addPlayer(username: string): void {
+        this.players.push(new Player(username));
     }
     
     /**
      * Method when command is received in game
      * @param command 
      */
-     onCommandRecieved(command: string): void {
+     onCommandRecieved(command: JSON): void {
     }
 }

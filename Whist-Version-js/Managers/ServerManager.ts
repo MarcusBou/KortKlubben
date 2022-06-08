@@ -3,6 +3,7 @@ import { CreateRoomListener, GetListOfRoomsListener } from "../Listeners/RestLis
 import { RestApi } from "../RestApi/RestApi";
 import { json } from "express";
 import * as http from 'http';
+import { WebSocketServer } from "../Websocket/WebsocketServer";
 /**
  * 
  * Class for servermanager
@@ -21,6 +22,7 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
     private api : RestApi;
     private activeIds: Array<string>;
     private WsHttp: http.Server;
+    private WS: WebSocketServer;
 
     constructor() {
         this.api = new RestApi(this, this);
@@ -35,6 +37,8 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
         this.WsHttp.listen(5000, function()  {
                 console.log((new Date()) + ': Server port is 5000');
         });
+
+        this.WS = new WebSocketServer(this.WsHttp);
     }
     
     /**
@@ -42,7 +46,7 @@ class ServerManager implements CreateRoomListener, GetListOfRoomsListener{
      * @param id For logging later
      */
     AddRoom(id) {
-        this.activeRooms.push(new GameManager(id, this.WsHttp));    
+        this.activeRooms.push(new GameManager(id, this.WS));    
     }
     
     /**

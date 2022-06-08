@@ -20,7 +20,13 @@ export interface IGameEngine {
     End(): void;
     
     /**
-     * abstract method for when commannd is received through ws
+     * Abstract method for when commannd is received through ws
      */
-    onCommandRecieved(command: string): void;
+    onCommandRecieved(command: JSON): void;
+
+    /**
+     * Adds player to playerlist in the game
+     */
+     addPlayer(username: string): void;
+
 }

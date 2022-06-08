@@ -22,10 +22,11 @@ var Deck_1 = require("../Engine/Deck");
 var Decks_1 = require("../Engine/Decks");
 var WhistGame = /** @class */ (function (_super) {
     __extends(WhistGame, _super);
-    function WhistGame() {
+    function WhistGame(listener) {
         var _this = _super.call(this) || this;
         _this.dealtCards = new Map();
         _this.playerPoints = new Map();
+        _this.responseListener = listener;
         return _this;
     }
     WhistGame.prototype.Start = function () {
@@ -135,10 +136,12 @@ var WhistGame = /** @class */ (function (_super) {
         }
     };
     WhistGame.prototype.onCommandRecieved = function (command) {
-        switch (command) {
+        switch (command.command) {
             case "start":
+                this.Start();
                 break;
             case "playCard":
+                this.responseListener.onResponse(command.info["username"]);
                 break;
             default:
                 console.log("no command received");
