@@ -46,7 +46,7 @@ export class WhistGame extends CardGame {
                 this.playerTurn = this.players[i];
                 this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(),"Whist", "turn", "")
                 //Waiting for card to play
-                //while (this.cardPlayed == null) {}
+                while (this.cardPlayed == null) {async() =>{ new Promise(f => setTimeout(f, 250))};}
                 //Player at index plays a Card
                 let card: Card = this.players[i].playCard(this.cardPlayed);
                 if (card != null) {    
