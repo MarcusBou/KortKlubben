@@ -8,23 +8,29 @@ var WhistGame_1 = require("../Games/WhistGame");
 var GameManager = /** @class */ (function () {
     function GameManager(id, server) {
         this.id = id;
-        this.game = new WhistGame_1.WhistGame();
+        this.game = new WhistGame_1.WhistGame(this);
         this.ws = server;
         this.ws.addListener(this);
         this.ws.addActiveRoom(id);
     }
     GameManager.prototype.onPlayerJoin = function (roomID, username) {
+        this.game.addPlayer(username);
         console.log("Awesome " + username + " joined");
     };
     GameManager.prototype.onPlayerDisconnected = function (roomID, username) {
         console.log(username + " disconnected");
     };
     GameManager.prototype.CommandReceived = function (jsonstring) {
-        var command = JSON.parse(jsonstring);
-        this.game.onCommandRecieved(command.Command);
+        try {
+            var command = JSON.parse(jsonstring);
+            this.game.onCommandRecieved(command);
+        }
+        catch (e) {
+            this.ws.broadcastRoom(this.id, "Not a valid json input");
+        }
     };
     GameManager.prototype.onResponse = function (response) {
-        throw new Error("Method not implemented.");
+        this.ws.broadcastRoom(this.id, response);
     };
     GameManager.prototype.getId = function () {
         return this.id;

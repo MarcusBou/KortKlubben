@@ -8,14 +8,15 @@ import { Player } from "../Engine/Player";
 import { Symbol } from "../Engine/Symbol";
 
 export class WhistGame extends CardGame {
-    private endpointListener: IGameListener;
+    private responseListener: IGameListener;
     private dealtCards: ESMap<Player, Card>;
     private playerPoints: ESMap<Player, number>;
 
-    public constructor() {
+    public constructor(listener : IGameListener) {
         super();
         this.dealtCards = new Map<Player, Card>();
         this.playerPoints = new Map<Player, number>();
+        this.responseListener = listener;
     }
     
     public Start(): void {
@@ -133,11 +134,14 @@ export class WhistGame extends CardGame {
         }
     }
 
-    public onCommandRecieved(command: string): void {
-        switch (command) {
+    public onCommandRecieved(command): void {
+        
+        switch (command.command) {
             case "start":
+                this.Start();
                 break;
             case "playCard":
+                this.responseListener.onResponse(command.info["username"])
                 break;
             default:
                 console.log("no command received");

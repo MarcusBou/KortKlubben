@@ -1,6 +1,6 @@
 export interface WSlistener{
-     
-    CommandReceived(jsonstring: string);
+
+    CommandReceived(roomID:string, jsonstring: string);
 
     onPlayerJoin(roomID: string, username: string);
 

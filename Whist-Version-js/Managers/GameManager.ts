@@ -1,3 +1,4 @@
+import { trimSingleQuotes } from "tslint/lib/utils";
 import { IGameEngine } from "../Engine/IGameEngine";
 import { IGameListener } from "../Engine/IGameListener";
 import { WhistGame } from "../Games/WhistGame";
@@ -13,25 +14,32 @@ export class GameManager implements WSlistener, IGameListener{
 
     constructor(id, server: WebSocketServer){
         this.id = id;
-        this.game = new WhistGame();
+        this.game = new WhistGame(this);
         this.ws = server;
         this.ws.addListener(this); 
         this.ws.addActiveRoom(id);
     }
     onPlayerJoin(roomID: string, username: string) {
+        this.game.addPlayer(username);
         console.log("Awesome " + username + " joined");
     }
     onPlayerDisconnected(roomID: string, username: string) {
         console.log(username + " disconnected");
     }
     
-    CommandReceived(jsonstring: string) {
-        let command = JSON.parse(jsonstring);
-        this.game.onCommandRecieved(command.Command);
+    CommandReceived(roomID: string, jsonstring: string) {
+        if(roomID == this.id){
+            try{
+                let command = JSON.parse(jsonstring);
+                this.game.onCommandRecieved(command);
+            }catch(e){
+                this.ws.broadcastRoom(this.id, "Not a valid json input");
+            }
+        }
     }
 
     onResponse(response: string) {
-        throw new Error("Method not implemented.");
+        this.ws.broadcastRoom(this.id, response);
     }
 
     public getId(){

@@ -53,7 +53,7 @@ export class WebSocketServer {
                         roomFound = true;
                         user.getSession().on("message", (message: ws.Message) => {
                             if (message.type === "utf8") {
-                                this.NotifyOnMessage(message.utf8Data);
+                                this.NotifyOnMessage(user.getRoomID(), message.utf8Data);
                             }
                         });
                         user.getSession().on('close', () => {
@@ -109,9 +109,9 @@ export class WebSocketServer {
         }
     }
     
-    private NotifyOnMessage(message: string): void {
+    private NotifyOnMessage(roomID: string, message: string): void {
         this.listeners.forEach(listener => {
-            listener.CommandReceived(message);
+            listener.CommandReceived(roomID, message);
         });
     }
 

@@ -3,6 +3,7 @@ exports.__esModule = true;
 exports.CardGame = void 0;
 var Dealer_1 = require("./Dealer");
 var Deck_1 = require("./Deck");
+var Player_1 = require("./Player");
 /**
  * Class for CardGame
  *
@@ -67,8 +68,8 @@ var CardGame = /** @class */ (function () {
      * Method to add a player to the "table"
      * @param player
      */
-    CardGame.prototype.addPlayer = function (player) {
-        this.players.push(player);
+    CardGame.prototype.addPlayer = function (username) {
+        this.players.push(new Player_1.Player(username));
     };
     /**
      * Method when command is received in game
