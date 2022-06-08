@@ -49,21 +49,29 @@ var WhistGame = /** @class */ (function (_super) {
             var symbol = void 0;
             this.dealtCards = new Map();
             for (var i = 0; i < this.players.length; i++) {
+                this.cardPlayed = null;
+                //Waiting for card to play
+                while (this.cardPlayed == null) { }
                 //Player at index plays a Card
-                var card = this.players[i].playCard(0);
-                //If i is the first Position of the loop
-                if (i == startPos) {
-                    //Then set symbol for round
-                    symbol = card.GetSymbol();
-                }
-                if (index >= this.players.length - 1) {
-                    index = 0;
+                var card = this.players[i].playCard(this.cardPlayed);
+                if (card != null) {
+                    //If i is the first Position of the loop
+                    if (i == startPos) {
+                        //Then set symbol for round
+                        symbol = card.GetSymbol();
+                    }
+                    if (index >= this.players.length - 1) {
+                        index = 0;
+                    }
+                    else {
+                        index++;
+                    }
+                    //Put the card on the table
+                    this.dealtCards.set(this.players[i], card);
                 }
                 else {
-                    index++;
+                    i--;
                 }
-                //Put the card on the table
-                this.dealtCards.set(this.players[i], card);
             }
             //Find the Player who won the stik
             var stik_winner = this.findStikWinner(symbol);
@@ -135,19 +143,6 @@ var WhistGame = /** @class */ (function (_super) {
             this.players[i].SetHand(hands[i]);
         }
     };
-    WhistGame.prototype.onCommandRecieved = function (command) {
-        switch (command.command) {
-            case "start":
-                this.Start();
-                break;
-            case "playCard":
-                this.responseListener.onResponse(command.info["username"]);
-                break;
-            default:
-                console.log("no command received");
-                break;
-        }
-    };
     /**
      * Method to check if players hands are empty
      * @return Whether hands are empty = true or still have cards = false
@@ -177,6 +172,29 @@ var WhistGame = /** @class */ (function (_super) {
         else {
             return [this.players[1], this.players[3]];
         }
+    };
+    /**
+     * For when command is received, read through the command and do something
+     */
+    WhistGame.prototype.onCommandRecieved = function (message) {
+        if (message.game == "Whist") {
+            switch (message.command) {
+                case "start":
+                    this.Start();
+                    break;
+                case "playCard":
+                    this.setcard(message.info);
+                    break;
+                default:
+                    console.log("no command received");
+                    break;
+            }
+        }
+        else {
+            this.responseListener.onResponse("Whist", "Error", "Not a command intended for whist");
+        }
+    };
+    WhistGame.prototype.setcard = function (information) {
     };
     return WhistGame;
 }(CardGame_1.CardGame));

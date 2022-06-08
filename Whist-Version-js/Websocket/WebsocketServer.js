@@ -39,7 +39,7 @@ var WebSocketServer = /** @class */ (function () {
                         roomFound_1 = true;
                         user_1.getSession().on("message", function (message) {
                             if (message.type === "utf8") {
-                                _this.NotifyOnMessage(message.utf8Data);
+                                _this.NotifyOnMessage(user_1.getRoomID(), message.utf8Data);
                             }
                         });
                         user_1.getSession().on('close', function () {
@@ -88,9 +88,9 @@ var WebSocketServer = /** @class */ (function () {
             }
         }
     };
-    WebSocketServer.prototype.NotifyOnMessage = function (message) {
+    WebSocketServer.prototype.NotifyOnMessage = function (roomID, message) {
         this.listeners.forEach(function (listener) {
-            listener.CommandReceived(message);
+            listener.CommandReceived(roomID, message);
         });
     };
     WebSocketServer.prototype.NotifyOnUserJoined = function (roomID, username) {

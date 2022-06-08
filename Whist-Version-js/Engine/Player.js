@@ -47,10 +47,17 @@ var Player = /** @class */ (function () {
      * @param index Card index from hand
      * @return played card
      */
-    Player.prototype.playCard = function (index) {
-        var playCard = this.hand[index];
-        this.hand.splice(index, 1);
-        return playCard;
+    Player.prototype.playCard = function (playedCard) {
+        var card = null;
+        for (var i = 0; i < this.hand.length; i++) {
+            if (this.hand[i].IsSameSymbol(playedCard.GetSymbol())) {
+                if (this.hand[i].GetNumber() == playedCard.GetNumber()) {
+                    card = this.hand[i];
+                    this.hand.splice(i, 1);
+                }
+            }
+        }
+        return card;
     };
     return Player;
 }());

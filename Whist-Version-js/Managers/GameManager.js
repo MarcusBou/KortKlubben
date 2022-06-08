@@ -20,20 +20,23 @@ var GameManager = /** @class */ (function () {
     GameManager.prototype.onPlayerDisconnected = function (roomID, username) {
         console.log(username + " disconnected");
     };
-    GameManager.prototype.CommandReceived = function (jsonstring) {
-        try {
-            var command = JSON.parse(jsonstring);
-            this.game.onCommandRecieved(command);
-        }
-        catch (e) {
-            this.ws.broadcastRoom(this.id, "Not a valid json input");
-        }
+    GameManager.prototype.CommandReceived = function (roomID, jsonstring) {
+        this.ws.broadcastRoom(this.id, jsonstring);
+        /*if(roomID == this.id){
+            try{
+                let command = JSON.parse(jsonstring);
+                this.game.onCommandRecieved(command);
+            }catch(e){
+                this.ws.broadcastRoom(this.id, "Not a valid json input");
+            }
+        }*/
     };
-    GameManager.prototype.onResponse = function (response) {
-        this.ws.broadcastRoom(this.id, response);
+    GameManager.prototype.onResponse = function (game, command, information) {
     };
     GameManager.prototype.getId = function () {
         return this.id;
+    };
+    GameManager.prototype.prepareMessage = function (game, command, information) {
     };
     return GameManager;
 }());

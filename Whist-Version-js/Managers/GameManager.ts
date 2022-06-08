@@ -28,14 +28,15 @@ export class GameManager implements WSlistener, IGameListener{
     }
     
     CommandReceived(roomID: string, jsonstring: string) {
-        if(roomID == this.id){
+        this.ws.broadcastRoom(this.id, jsonstring);
+        /*if(roomID == this.id){
             try{
                 let command = JSON.parse(jsonstring);
                 this.game.onCommandRecieved(command);
             }catch(e){
                 this.ws.broadcastRoom(this.id, "Not a valid json input");
             }
-        }
+        }*/
     }
 
     onResponse(game: string, command: string, information: any) {
