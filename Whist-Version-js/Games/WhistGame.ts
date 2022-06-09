@@ -1,4 +1,5 @@
 import { ESMap, SymbolDisplayPartKind, sys } from "typescript";
+import { Console } from "winston/lib/winston/transports";
 import { Card } from "../Engine/Card";
 import { CardGame } from "../Engine/CardGame";
 import { Deck } from "../Engine/Deck";
@@ -38,54 +39,7 @@ export class WhistGame extends CardGame {
     public Running(): void {
         let index: number = 0;
         let startPos: number = 0;
-        while (this.isRunning) {
-            let symbol: string;
-            this.dealtCards = new Map<Player, Card>();
-            for (let i = 0; i < this.players.length; i++) {
-                this.cardPlayed = null;
-                this.playerTurn = this.players[i];
-                this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(),"Whist", "turn", "")
-                //Waiting for card to play
-                //Player at index plays a Card
-                
-                let card: Card = this.players[i].playCard(this.cardPlayed);  
-                if(card != null){
-                    //If i is the first Position of the loop
-                    if (i == startPos) {
-                        //Then set symbol for round
-                        symbol = card.GetSymbol();
-                    }
-                    if (index >= this.players.length - 1) {
-                        index = 0;
-                    } else {
-                        index++;
-                    }
-                    //Put the card on the table
-                    this.dealtCards.set(this.players[i], card);
-                }else{
-                    i--;
-                }
-                
-               
-            }
-
-            //Find the Player who won the stik
-            let stik_winner: Player = this.findStikWinner(symbol);
-
-            console.log(stik_winner.GetUsername() + " vandt et stik");
-            
-            //Add point to stik winner
-            this.playerPoints.set(stik_winner, this.playerPoints.get(stik_winner) + 1);
-            
-            //Check if the players hands are empty
-            if (this.isHandsEmpty()) {
-                //End game
-                this.End();
-            } else {
-                //Set the start position/index
-                startPos = this.getWinnerPos(stik_winner);
-            }
-        }
+        this.gameLoop(index, startPos);
     }
 
     public End(): void {
@@ -211,5 +165,64 @@ export class WhistGame extends CardGame {
             this.cardPlayed = new Card(symbol, information.number);
             console.log(username + " has played")
         }
+    }
+
+    private gameLoop(index:number, startPos: number){
+        setTimeout(() => {
+            let symbol: string;
+            this.dealtCards = new Map<Player, Card>();
+            for (let i = 0; i < this.players.length; i++) {
+                this.cardPlayed = null;
+                this.playerTurn = this.players[i];
+                this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(),"Whist", "turn", "")
+                //Waiting for card to play
+                this.waitForInput();
+                //Player at index plays a Card
+                
+                let card: Card = this.players[i].playCard(this.cardPlayed);  
+                if(card != null){
+                    //If i is the first Position of the loop
+                    if (i == startPos) {
+                        //Then set symbol for round
+                        symbol = card.GetSymbol();
+                    }
+                    if (index >= this.players.length - 1) {
+                        index = 0;
+                    } else {
+                        index++;
+                    }
+                    //Put the card on the table
+                    this.dealtCards.set(this.players[i], card);
+                }else{
+                    i--;
+                }
+            }
+
+            //Find the Player who won the stik
+            let stik_winner: Player = this.findStikWinner(symbol);
+
+            console.log(stik_winner.GetUsername() + " vandt et stik");
+            
+            //Add point to stik winner
+            this.playerPoints.set(stik_winner, this.playerPoints.get(stik_winner) + 1);
+            
+            //Check if the players hands are empty
+            if (this.isHandsEmpty()) {
+                //End game
+                this.End();
+            } else {
+                //Set the start position/index
+                startPos = this.getWinnerPos(stik_winner);
+                this.gameLoop(index, startPos);
+                }
+        }, 500);
+    }
+
+    public waitForInput(){
+        console.log("Er dette skod?");
+        setTimeout(() => {
+            this.waitForInput();
+            console.log("Er dette ikke skod?");
+        }, 100);
     }
 }

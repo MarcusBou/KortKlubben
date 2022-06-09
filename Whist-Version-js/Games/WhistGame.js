@@ -46,50 +46,7 @@ var WhistGame = /** @class */ (function (_super) {
     WhistGame.prototype.Running = function () {
         var index = 0;
         var startPos = 0;
-        while (this.isRunning) {
-            var symbol = void 0;
-            this.dealtCards = new Map();
-            for (var i = 0; i < this.players.length; i++) {
-                this.cardPlayed = null;
-                this.playerTurn = this.players[i];
-                this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(), "Whist", "turn", "");
-                //Waiting for card to play
-                //Player at index plays a Card
-                var card = this.players[i].playCard(this.cardPlayed);
-                if (card != null) {
-                    //If i is the first Position of the loop
-                    if (i == startPos) {
-                        //Then set symbol for round
-                        symbol = card.GetSymbol();
-                    }
-                    if (index >= this.players.length - 1) {
-                        index = 0;
-                    }
-                    else {
-                        index++;
-                    }
-                    //Put the card on the table
-                    this.dealtCards.set(this.players[i], card);
-                }
-                else {
-                    i--;
-                }
-            }
-            //Find the Player who won the stik
-            var stik_winner = this.findStikWinner(symbol);
-            console.log(stik_winner.GetUsername() + " vandt et stik");
-            //Add point to stik winner
-            this.playerPoints.set(stik_winner, this.playerPoints.get(stik_winner) + 1);
-            //Check if the players hands are empty
-            if (this.isHandsEmpty()) {
-                //End game
-                this.End();
-            }
-            else {
-                //Set the start position/index
-                startPos = this.getWinnerPos(stik_winner);
-            }
-        }
+        this.gameLoop(index, startPos);
     };
     WhistGame.prototype.End = function () {
         this.isRunning = false;
@@ -216,6 +173,63 @@ var WhistGame = /** @class */ (function (_super) {
             this.cardPlayed = new Card_1.Card(symbol, information.number);
             console.log(username + " has played");
         }
+    };
+    WhistGame.prototype.gameLoop = function (index, startPos) {
+        var _this = this;
+        setTimeout(function () {
+            var symbol;
+            _this.dealtCards = new Map();
+            for (var i = 0; i < _this.players.length; i++) {
+                _this.cardPlayed = null;
+                _this.playerTurn = _this.players[i];
+                _this.responseListener.onDirectMessageResponse(_this.players[i].GetUsername(), "Whist", "turn", "");
+                //Waiting for card to play
+                _this.waitForInput();
+                //Player at index plays a Card
+                var card = _this.players[i].playCard(_this.cardPlayed);
+                if (card != null) {
+                    //If i is the first Position of the loop
+                    if (i == startPos) {
+                        //Then set symbol for round
+                        symbol = card.GetSymbol();
+                    }
+                    if (index >= _this.players.length - 1) {
+                        index = 0;
+                    }
+                    else {
+                        index++;
+                    }
+                    //Put the card on the table
+                    _this.dealtCards.set(_this.players[i], card);
+                }
+                else {
+                    i--;
+                }
+            }
+            //Find the Player who won the stik
+            var stik_winner = _this.findStikWinner(symbol);
+            console.log(stik_winner.GetUsername() + " vandt et stik");
+            //Add point to stik winner
+            _this.playerPoints.set(stik_winner, _this.playerPoints.get(stik_winner) + 1);
+            //Check if the players hands are empty
+            if (_this.isHandsEmpty()) {
+                //End game
+                _this.End();
+            }
+            else {
+                //Set the start position/index
+                startPos = _this.getWinnerPos(stik_winner);
+                _this.gameLoop(index, startPos);
+            }
+        }, 500);
+    };
+    WhistGame.prototype.waitForInput = function () {
+        var _this = this;
+        console.log("Er dette skod?");
+        setTimeout(function () {
+            _this.waitForInput();
+            console.log("Er dette ikke skod?");
+        }, 100);
     };
     return WhistGame;
 }(CardGame_1.CardGame));
