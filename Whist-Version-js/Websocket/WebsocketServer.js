@@ -39,6 +39,7 @@ var WebSocketServer = /** @class */ (function () {
                         roomFound_1 = true;
                         user_1.getSession().on("message", function (message) {
                             if (message.type === "utf8") {
+                                console.log(message.utf8Data);
                                 _this.NotifyOnMessage(user_1.getRoomID(), user_1.getUsername(), message.utf8Data);
                             }
                         });
