@@ -46,10 +46,10 @@ export class WhistGame extends CardGame {
                 this.playerTurn = this.players[i];
                 this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(),"Whist", "turn", "")
                 //Waiting for card to play
-                while (this.cardPlayed == null) {async() =>{ new Promise(f => setTimeout(f, 250))};}
                 //Player at index plays a Card
-                let card: Card = this.players[i].playCard(this.cardPlayed);
-                if (card != null) {    
+                
+                let card: Card = this.players[i].playCard(this.cardPlayed);  
+                if(card != null){
                     //If i is the first Position of the loop
                     if (i == startPos) {
                         //Then set symbol for round
@@ -62,10 +62,11 @@ export class WhistGame extends CardGame {
                     }
                     //Put the card on the table
                     this.dealtCards.set(this.players[i], card);
-                }
-                else{
+                }else{
                     i--;
                 }
+                
+               
             }
 
             //Find the Player who won the stik

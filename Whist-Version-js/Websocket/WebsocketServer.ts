@@ -74,6 +74,7 @@ export class WebSocketServer {
                          */
                         user.getSession().on("message", (message: ws.Message) => {
                             if (message.type === "utf8") {
+                                console.log(message.utf8Data);
                                 this.NotifyOnMessage(user.getRoomID(), user.getUsername(), message.utf8Data);
                             }
                         });
