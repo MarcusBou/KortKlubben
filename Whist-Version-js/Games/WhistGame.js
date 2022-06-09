@@ -14,6 +14,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 exports.__esModule = true;
 exports.WhistGame = void 0;
 var Card_1 = require("../Engine/Card");
@@ -175,61 +211,113 @@ var WhistGame = /** @class */ (function (_super) {
         }
     };
     WhistGame.prototype.gameLoop = function (index, startPos) {
-        var _this = this;
-        setTimeout(function () {
-            var symbol;
-            _this.dealtCards = new Map();
-            for (var i = 0; i < _this.players.length; i++) {
-                _this.cardPlayed = null;
-                _this.playerTurn = _this.players[i];
-                _this.responseListener.onDirectMessageResponse(_this.players[i].GetUsername(), "Whist", "turn", "");
-                //Waiting for card to play
-                _this.waitForInput();
-                //Player at index plays a Card
-                var card = _this.players[i].playCard(_this.cardPlayed);
-                if (card != null) {
-                    //If i is the first Position of the loop
-                    if (i == startPos) {
-                        //Then set symbol for round
-                        symbol = card.GetSymbol();
-                    }
-                    if (index >= _this.players.length - 1) {
-                        index = 0;
-                    }
-                    else {
-                        index++;
-                    }
-                    //Put the card on the table
-                    _this.dealtCards.set(_this.players[i], card);
-                }
-                else {
-                    i--;
-                }
-            }
-            //Find the Player who won the stik
-            var stik_winner = _this.findStikWinner(symbol);
-            console.log(stik_winner.GetUsername() + " vandt et stik");
-            //Add point to stik winner
-            _this.playerPoints.set(stik_winner, _this.playerPoints.get(stik_winner) + 1);
-            //Check if the players hands are empty
-            if (_this.isHandsEmpty()) {
-                //End game
-                _this.End();
-            }
-            else {
-                //Set the start position/index
-                startPos = _this.getWinnerPos(stik_winner);
-                _this.gameLoop(index, startPos);
-            }
-        }, 500);
+        var symbol;
+        this.dealtCards = new Map();
+        this.round(index, symbol, startPos);
     };
-    WhistGame.prototype.waitForInput = function () {
-        var _this = this;
-        console.log("Er dette skod?");
-        setTimeout(function () {
-            _this.waitForInput();
-            console.log("Er dette ikke skod?");
-        }, 100);
+    WhistGame.prototype.waitForInput = function (_callback) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log("FUCK NU AF");
+                        if (!(this.cardPlayed == null)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.delay(1000)];
+                    case 1:
+                        _a.sent();
+                        this.waitForInput(_callback);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        _callback();
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    WhistGame.prototype.round = function (index, symbol, startPos) {
+        return __awaiter(this, void 0, void 0, function () {
+            var i;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        i = 0;
+                        return [4 /*yield*/, this.roundLoop(i, index, symbol, startPos)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    WhistGame.prototype.endOfRound = function (index, symbol, startPos) {
+        //Find the Player who won the stik
+        var stik_winner = this.findStikWinner(symbol);
+        console.log(stik_winner.GetUsername() + " vandt et stik");
+        //Add point to stik winner
+        this.playerPoints.set(stik_winner, this.playerPoints.get(stik_winner) + 1);
+        //Check if the players hands are empty
+        if (this.isHandsEmpty()) {
+            //End game
+            this.End();
+        }
+        else {
+            //Set the start position/index
+            startPos = this.getWinnerPos(stik_winner);
+            this.gameLoop(index, startPos);
+        }
+    };
+    WhistGame.prototype.delay = function (ms) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, ms); })];
+            });
+        });
+    };
+    WhistGame.prototype.roundLoop = function (i, startPos, symbol, index) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(i < this.players.length)) return [3 /*break*/, 2];
+                        this.cardPlayed = null;
+                        this.playerTurn = this.players[i];
+                        console.log(this.playerTurn.GetUsername());
+                        this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(), "Whist", "turn", "");
+                        //Waiting for card to play
+                        return [4 /*yield*/, this.waitForInput(function () {
+                                var card = _this.players[i].playCard(_this.cardPlayed);
+                                if (card != null) {
+                                    console.log("Død over nisserne");
+                                    //If i is the first Position of the loop
+                                    if (i == startPos) {
+                                        //Then set symbol for round
+                                        symbol = card.GetSymbol();
+                                    }
+                                    if (index >= _this.players.length - 1) {
+                                        index = 0;
+                                    }
+                                    else {
+                                        index++;
+                                    }
+                                    //Put the card on the table
+                                    _this.dealtCards.set(_this.players[i], card);
+                                    i++;
+                                }
+                                else {
+                                    i--;
+                                }
+                            })];
+                    case 1:
+                        //Waiting for card to play
+                        _a.sent();
+                        this.roundLoop(i, startPos, symbol, index);
+                        _a.label = 2;
+                    case 2: return [2 /*return*/];
+                }
+            });
+        });
     };
     return WhistGame;
 }(CardGame_1.CardGame));

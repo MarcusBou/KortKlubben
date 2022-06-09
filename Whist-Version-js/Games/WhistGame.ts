@@ -168,19 +168,67 @@ export class WhistGame extends CardGame {
     }
 
     private gameLoop(index:number, startPos: number){
-        setTimeout(() => {
-            let symbol: string;
-            this.dealtCards = new Map<Player, Card>();
-            for (let i = 0; i < this.players.length; i++) {
-                this.cardPlayed = null;
-                this.playerTurn = this.players[i];
-                this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(),"Whist", "turn", "")
-                //Waiting for card to play
-                this.waitForInput();
-                //Player at index plays a Card
-                
+        let symbol: string;
+        this.dealtCards = new Map<Player, Card>();
+        this.round(index, symbol,startPos)
+    }
+
+
+    public async waitForInput(_callback){
+       
+        console.log("FUCK NU AF");
+        if(this.cardPlayed == null){
+            await this.delay(1000);
+            this.waitForInput(_callback)
+        }
+        else{
+            _callback();
+        }
+        
+    }
+
+    private async round(index, symbol,startPos){
+        let i = 0;
+        await this.roundLoop(i,index, symbol,startPos);
+        //this.endOfRound(index, symbol, startPos);
+    }
+
+    private endOfRound(index, symbol, startPos){
+        //Find the Player who won the stik
+        let stik_winner: Player = this.findStikWinner(symbol);
+
+        console.log(stik_winner.GetUsername() + " vandt et stik");
+        
+        //Add point to stik winner
+        this.playerPoints.set(stik_winner, this.playerPoints.get(stik_winner) + 1);
+        
+        
+        //Check if the players hands are empty
+        if (this.isHandsEmpty()) {
+            //End game
+            this.End();
+        } else {
+            //Set the start position/index
+            startPos = this.getWinnerPos(stik_winner);
+            this.gameLoop(index, startPos);
+        }
+    }
+
+    private async delay(ms:number){
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    private async roundLoop(i, startPos, symbol, index){
+        if(i < this.players.length){
+            this.cardPlayed = null;
+            this.playerTurn = this.players[i];
+            console.log(this.playerTurn.GetUsername());
+            this.responseListener.onDirectMessageResponse(this.players[i].GetUsername(),"Whist", "turn", "")
+            //Waiting for card to play
+            await this.waitForInput(()=>{
                 let card: Card = this.players[i].playCard(this.cardPlayed);  
                 if(card != null){
+                    console.log("Død over nisserne");
                     //If i is the first Position of the loop
                     if (i == startPos) {
                         //Then set symbol for round
@@ -193,36 +241,11 @@ export class WhistGame extends CardGame {
                     }
                     //Put the card on the table
                     this.dealtCards.set(this.players[i], card);
+                    i++;
                 }else{
                     i--;
-                }
-            }
-
-            //Find the Player who won the stik
-            let stik_winner: Player = this.findStikWinner(symbol);
-
-            console.log(stik_winner.GetUsername() + " vandt et stik");
-            
-            //Add point to stik winner
-            this.playerPoints.set(stik_winner, this.playerPoints.get(stik_winner) + 1);
-            
-            //Check if the players hands are empty
-            if (this.isHandsEmpty()) {
-                //End game
-                this.End();
-            } else {
-                //Set the start position/index
-                startPos = this.getWinnerPos(stik_winner);
-                this.gameLoop(index, startPos);
-                }
-        }, 500);
-    }
-
-    public waitForInput(){
-        console.log("Er dette skod?");
-        setTimeout(() => {
-            this.waitForInput();
-            console.log("Er dette ikke skod?");
-        }, 100);
+            }});
+            this.roundLoop(i, startPos, symbol, index);
+        }
     }
 }
