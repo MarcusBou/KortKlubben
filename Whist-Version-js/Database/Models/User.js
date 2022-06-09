@@ -20,6 +20,14 @@ var User = /** @class */ (function () {
     User.prototype.GetBirthdate = function () {
         return this.birthdate;
     };
+    User.prototype.toString = function () {
+        return "User{" +
+            "username='" + this.username + '\'' +
+            ", name='" + this.name + '\'' +
+            ", mail='" + this.mail + '\'' +
+            ", birthdate=" + this.birthdate +
+            '}';
+    };
     return User;
 }());
 exports.User = User;

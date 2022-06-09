@@ -10,21 +10,17 @@ export class DBManager extends BaseDatabase {
     public async GetUserFromUsername(username: string): Promise<User> {
         await this.Open();
         let request: any = new this.sql.Request();
-        request.query("CALL GetUserTFromUsername(?)", [username], function(err, recordset) {
-            if (err) return null;
-            console.log(recordset);
+        request.input("Username", this.sql.VARCHAR, username);
+        request.execute("GetUserTFromUsername").then(function(data) {
+            if(data == null) {
+                return null;
+            }
+            if (data.recordset == null) {
+                return null;
+            }
+            return new User(username, data.recordset[0].Name, data.recordset[0].Email, data.recordset[0].Birthdate);
         });
-        return new User("Test", "TEst", "awdaiwa", "09-06-2022");
-    }
-
-    public async GetUsers(): Promise<any> {
-        await this.Open();
-        let request: any = new this.sql.Request();
-        request.query("SELECT * FROM UserT", function(err, recordset) {
-        if (err) console.log(err)
-
-        console.log(recordset);
-        });
+        return null;
     }
 }
 

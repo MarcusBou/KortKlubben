@@ -53,22 +53,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.DBManager = void 0;
 var BaseDatabase_1 = require("./BaseDatabase");
+var User_1 = require("./Models/User");
 var DBManager = /** @class */ (function (_super) {
     __extends(DBManager, _super);
     function DBManager(config) {
         return _super.call(this, config) || this;
     }
     DBManager.prototype.GetUserFromUsername = function (username) {
-        this.Open();
-        var request = new this.sql.Request();
-        request.query("CALL GetUserTFromUsername(?)", [username], function (err, recordset) {
-            if (err)
-                return null;
-            console.log(recordset);
-        });
-        return null;
-    };
-    DBManager.prototype.GetUsers = function () {
         return __awaiter(this, void 0, void 0, function () {
             var request;
             return __generator(this, function (_a) {
@@ -77,12 +68,17 @@ var DBManager = /** @class */ (function (_super) {
                     case 1:
                         _a.sent();
                         request = new this.sql.Request();
-                        request.query("SELECT * FROM UserT", function (err, recordset) {
-                            if (err)
-                                console.log(err);
-                            console.log(recordset);
+                        request.input("Username", this.sql.VARCHAR, username);
+                        request.execute("GetUserTFromUsername").then(function (data) {
+                            if (data == null) {
+                                return null;
+                            }
+                            if (data.recordset == null) {
+                                return null;
+                            }
+                            return new User_1.User(username, data.recordset[0].Name, data.recordset[0].Email, data.recordset[0].Birthdate);
                         });
-                        return [2 /*return*/];
+                        return [2 /*return*/, null];
                 }
             });
         });
@@ -91,7 +87,7 @@ var DBManager = /** @class */ (function (_super) {
 }(BaseDatabase_1.BaseDatabase));
 exports.DBManager = DBManager;
 var db = new DBManager(require('./config.js'));
-db.GetUsers();
+console.log(db.GetUserFromUsername("TGPGamez"));
 // const config = require('./config.js');
 // sql.connect(config, function(err) {
 //     if(err) {

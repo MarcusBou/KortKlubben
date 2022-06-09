@@ -26,4 +26,13 @@ export class User {
         this.mail = mail;
         this.birthdate = birthdate;
     }
+
+    public toString(): string {
+        return "User{" +
+        "username='" + this.username + '\'' +
+        ", name='" + this.name + '\'' +
+        ", mail='" + this.mail + '\'' +
+        ", birthdate=" + this.birthdate +
+        '}';
+    }
 }
