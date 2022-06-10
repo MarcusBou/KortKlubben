@@ -9,7 +9,7 @@ var Decks = /** @class */ (function () {
     Decks.StandardCardDeck = function () {
         var cards = new Array();
         for (var symbol in Symbol_1.Symbol) {
-            for (var i = 0; i < 14; i++) {
+            for (var i = 1; i < 14; i++) {
                 cards.push(new Card_1.Card(symbol, i));
             }
         }

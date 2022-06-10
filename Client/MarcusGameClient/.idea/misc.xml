@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Marc8847/Documents/Github/H3/KortKlubben/Client/MarcusGameClient/app/src/main/res/layout/activity_gamemenu.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/Marc8847/Documents/Github/H3/KortKlubben/Client/MarcusGameClient/app/src/main/res/layout/activity_login.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/Marc8847/Documents/Github/H3/KortKlubben/Client/MarcusGameClient/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/Marc8847/Documents/Github/H3/KortKlubben/Client/MarcusGameClient/app/src/main/res/layout/fragment_second.xml" value="0.22826086956521738" />
       </map>
     </option>
   </component>

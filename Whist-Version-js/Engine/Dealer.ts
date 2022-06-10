@@ -16,14 +16,15 @@ export class Dealer {
      * @return Shuffled list of cards
      */
     shuffleCards(cards: Card[]): Card[] {
+        let deck = cards;
         var j: number, x: Card, i: number;
-        for (i = cards.length - 1; i > 0; i--) {
+        for (i = deck.length - 1; i > 0; i--) {
             j = Math.floor(Math.random() * (i + 1));
-            x = cards[i];
-            cards[i] = cards[j];
-            cards[j] = x;
+            x = deck[i];
+            deck[i] = deck[j];
+            deck[j] = x;
         }
-        return cards;
+        return deck;
     }
 
 

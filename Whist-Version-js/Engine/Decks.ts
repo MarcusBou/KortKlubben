@@ -8,7 +8,7 @@ export class Decks {
     private static StandardCardDeck() {
         var cards: Card[] = new Array<Card>();
         for(const symbol in Symbol) {
-            for(let i = 0; i < 14; i++) {
+            for(let i = 1; i < 14; i++) {
                 cards.push(new Card(symbol, i));
             }
         }

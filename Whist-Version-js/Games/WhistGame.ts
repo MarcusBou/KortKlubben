@@ -155,6 +155,7 @@ export class WhistGame extends CardGame {
             this.responseListener.onDirectMessageResponse(username, "Whist", "Error" ,"Not a command intended for whist");
         }
     }
+    
     private setcard(username, information){
         if(username == this.playerTurn.GetUsername()){
             let symbol;

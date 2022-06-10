@@ -6,9 +6,9 @@ var WSUser_1 = require("./WSUser");
 /**
  * class for WebsocketServer
  *
- * this class
+ * this class is a websocket server that can communicate to websocket client
  *
- * @version 1.0
+ * @version 1.02
  * @author Sebastian Karlsen
  */
 var WebSocketServer = /** @class */ (function () {
@@ -127,21 +127,42 @@ var WebSocketServer = /** @class */ (function () {
             }
         }
     };
+    /**
+     * Notify all the observere a command Recived
+     * @param roomID the room id the command came from
+     * @param username the username the command came from
+     * @param message and the command
+     */
     WebSocketServer.prototype.NotifyOnMessage = function (roomID, username, message) {
         this.listeners.forEach(function (listener) {
             listener.CommandReceived(roomID, username, message);
         });
     };
+    /**
+     * Notify all the observere a user has joined
+     * @param roomID the room id the user joined to
+     * @param username the users username
+     */
     WebSocketServer.prototype.NotifyOnUserJoined = function (roomID, username) {
         this.listeners.forEach(function (listener) {
             listener.onPlayerJoin(roomID, username);
         });
     };
+    /**
+     * Notify all the observere a user has disconneted
+     * @param roomID the room ud user disconnectet from
+     * @param username users username
+     */
     WebSocketServer.prototype.NnotifyOnUserDisconnect = function (roomID, username) {
         this.listeners.forEach(function (listener) {
             listener.onPlayerDisconnected(roomID, username);
         });
     };
+    /**
+     * broadcast message to all the users with a spefic room id
+     * @param roomID the room id to broadcast to
+     * @param message the message to send to room
+     */
     WebSocketServer.prototype.broadcastRoom = function (roomID, message) {
         this.sessions.forEach(function (session) {
             if (session.getRoomID() == roomID) {
@@ -149,6 +170,11 @@ var WebSocketServer = /** @class */ (function () {
             }
         });
     };
+    /**
+     * broadcast to a user only
+     * @param username the username to send to
+     * @param message the message
+     */
     WebSocketServer.prototype.broadcastUsername = function (username, message) {
         this.sessions.forEach(function (session) {
             if (session.getUsername() == username) {
