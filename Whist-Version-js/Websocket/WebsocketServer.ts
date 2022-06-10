@@ -6,9 +6,9 @@ import { WSlistener } from "../Listeners/WsListener";
 /**
  * class for WebsocketServer
  * 
- * this class 
+ * this class is a websocket server that can communicate to websocket client
  * 
- * @version 1.0
+ * @version 1.02
  * @author Sebastian Karlsen
  */
 export class WebSocketServer {
@@ -153,24 +153,45 @@ export class WebSocketServer {
         }
     }
     
+    /**
+     * Notify all the observere a command Recived
+     * @param roomID the room id the command came from
+     * @param username the username the command came from
+     * @param message and the command
+     */
     private NotifyOnMessage(roomID: string, username: string, message: string): void {
         this.listeners.forEach(listener => {
             listener.CommandReceived(roomID, username, message);
         });
     }
 
+    /**
+     * Notify all the observere a user has joined
+     * @param roomID the room id the user joined to
+     * @param username the users username
+     */
     private NotifyOnUserJoined(roomID: string, username: string): void {
         this.listeners.forEach(listener => {
             listener.onPlayerJoin(roomID, username);
         });
     }
 
+    /**
+     * Notify all the observere a user has disconneted
+     * @param roomID the room ud user disconnectet from
+     * @param username users username
+     */
     private NnotifyOnUserDisconnect(roomID: string, username: string) {
         this.listeners.forEach(listener => {
             listener.onPlayerDisconnected(roomID, username);
         });
     }
 
+    /**
+     * broadcast message to all the users with a spefic room id
+     * @param roomID the room id to broadcast to
+     * @param message the message to send to room
+     */
     public broadcastRoom(roomID: string, message: string): void {
         this.sessions.forEach(session => {
             if (session.getRoomID() == roomID) {
@@ -179,6 +200,11 @@ export class WebSocketServer {
         });
     }
 
+    /**
+     * broadcast to a user only
+     * @param username the username to send to
+     * @param message the message
+     */
     public broadcastUsername(username: string, message: string) {
         this.sessions.forEach(session => {
             if (session.getUsername() == username) {
